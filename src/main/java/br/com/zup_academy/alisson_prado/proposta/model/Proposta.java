@@ -1,6 +1,12 @@
 package br.com.zup_academy.alisson_prado.proposta.model;
 
+import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.SolicitaAnaliseClient;
+import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.SolicitaAnaliseRequest;
+import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.SolicitaAnaliseTemplate;
 import br.com.zup_academy.alisson_prado.proposta.repository.PropostaRepository;
+import feign.FeignException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -9,6 +15,9 @@ import java.util.UUID;
 
 @Entity
 public class Proposta {
+
+    @Transient
+    private final Logger logger = LoggerFactory.getLogger(Proposta.class);
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,6 +29,9 @@ public class Proposta {
     @NotNull
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Cliente cliente;
+
+    @Enumerated(EnumType.STRING)
+    private StatusProposta status;
 
     @Deprecated
     private Proposta() {
@@ -33,9 +45,16 @@ public class Proposta {
         Assert.notNull(cliente, "Cliente não pode ser nulo");
         this.cliente = cliente;
         this.idUuid = UUID.randomUUID().toString();
+        this.status = StatusProposta.AGUARDANDO_APROVACAO;
     }
 
+    /**
+     * Verifica se já existe registro com o ddocumento informado.
+     * @param propostaRepository NotNull
+     * @return
+     */
     public boolean isDocumentoCadastrado(PropostaRepository propostaRepository){
+        Assert.notNull(propostaRepository, "PropostaRepository não pode ser nulo.");
         return propostaRepository.existsByClienteDocumento(cliente.getDocumento());
     }
 
@@ -49,5 +68,36 @@ public class Proposta {
 
     public Cliente getCliente() {
         return cliente;
+    }
+
+    public StatusProposta getStatus() {
+        return status;
+    }
+
+    /**
+     * Faz uma requisição POST para API de cartões que verifica se a proposta é elegível
+     * @param client SolicitaAnaliseClient NotNull
+     * @return
+     */
+    public void avaliaRestricoes(SolicitaAnaliseClient client) {
+        try{
+            SolicitaAnaliseTemplate analiseTemplate = new SolicitaAnaliseTemplate(this.cliente.getDocumento(),
+                    this.cliente.getNome(),
+                    this.idUuid);
+
+            SolicitaAnaliseRequest solicitaAnaliseRequest = client.solicitaAnalise(analiseTemplate);
+
+            // Se não lançar Exception retorna Status 201 e aprovação da proposta
+            this.status = solicitaAnaliseRequest.getResultadoSolicitacao().getStatusTransacaoPagamento();
+
+        } catch (FeignException.FeignClientException.UnprocessableEntity unprocessableEntity){
+            // Lança exception 422 caso não tenha sido aprovado
+            this.status = StatusProposta.NAO_ELEGIVEL;
+        } catch (FeignException e){
+            // Qualquer outro código de erro significa que houve falha com a API. Os dados são persistidos com Status AGUARDANDO_APROVACAO
+            logger.error("Não foi possível realizar a análise da proposta devido a falha de comunicação com a API de análise.: " + e.getMessage());
+        }
+
+
     }
 }
