@@ -1,6 +1,7 @@
 package br.com.zup_academy.alisson_prado.proposta.validacao;
 
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -9,6 +10,9 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
+
+@ResponseStatus(UNPROCESSABLE_ENTITY)
 public class UniqueValueValidator implements ConstraintValidator<UniqueValue, Object> {
 
     private String domainAttribute;
@@ -22,6 +26,7 @@ public class UniqueValueValidator implements ConstraintValidator<UniqueValue, Ob
         domainAttribute = params.fieldName();
         klass = params.domainClass();
     }
+
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext constraintValidatorContext) {

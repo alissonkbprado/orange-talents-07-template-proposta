@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface PropostaRepository extends JpaRepository<Proposta, Long> {
     Optional<Proposta> findByIdUuid(String uuid);
+
+    boolean existsByClienteDocumento(String documento);
 }

@@ -1,5 +1,6 @@
 package br.com.zup_academy.alisson_prado.proposta.model;
 
+import br.com.zup_academy.alisson_prado.proposta.repository.PropostaRepository;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -32,6 +33,10 @@ public class Proposta {
         Assert.notNull(cliente, "Cliente não pode ser nulo");
         this.cliente = cliente;
         this.idUuid = UUID.randomUUID().toString();
+    }
+
+    public boolean isDocumentoCadastrado(PropostaRepository propostaRepository){
+        return propostaRepository.existsByClienteDocumento(cliente.getDocumento());
     }
 
     public Long getId() {

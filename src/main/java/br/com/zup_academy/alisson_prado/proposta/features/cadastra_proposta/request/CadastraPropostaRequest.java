@@ -4,10 +4,12 @@ import br.com.zup_academy.alisson_prado.proposta.model.Cliente;
 import br.com.zup_academy.alisson_prado.proposta.model.Endereco;
 import br.com.zup_academy.alisson_prado.proposta.model.Proposta;
 import br.com.zup_academy.alisson_prado.proposta.validacao.CpfOrCnpj;
-import br.com.zup_academy.alisson_prado.proposta.validacao.UniqueValue;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 
 public class CadastraPropostaRequest {
@@ -18,7 +20,7 @@ public class CadastraPropostaRequest {
     @NotBlank @Email
     private String email;
 
-    @CpfOrCnpj @NotBlank @UniqueValue(domainClass = Cliente.class, fieldName = "documento")
+    @CpfOrCnpj @NotBlank
     private String documento;
 
     @NotNull @PositiveOrZero
@@ -45,5 +47,9 @@ public class CadastraPropostaRequest {
                 endereco);
 
         return new Proposta(cliente);
+    }
+
+    public String getDocumento() {
+        return documento.toString().replaceAll("\\p{Punct}", "");
     }
 }

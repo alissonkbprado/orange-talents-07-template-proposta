@@ -51,13 +51,13 @@ public class Cliente {
      *
      * @param nome NotBlank
      * @param email NotBlank
-     * @param documento NotBlank, CPF ou CNPJ
+     * @param documento Unique, CPF or CNPJ, NotBlank
      * @param salarioBruto NotNull, Positive
      * @param endereco NotNull
      */
     public Cliente(@NotBlank String nome,
                    @NotBlank String email,
-                   @NotNull String documento,
+                   @NotNull @CpfOrCnpj String documento,
                    @NotNull BigDecimal salarioBruto,
                    @NotNull Endereco endereco) {
 
