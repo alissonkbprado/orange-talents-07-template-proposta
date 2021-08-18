@@ -6,17 +6,22 @@ import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.resp
 import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.SolicitaAnaliseClient;
 import br.com.zup_academy.alisson_prado.proposta.model.Proposta;
 import br.com.zup_academy.alisson_prado.proposta.repository.PropostaRepository;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.actuate.health.Status;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/propostas")
-public class PropostasController {
+public class PropostasController implements HealthIndicator {
 
     private PropostaRepository propostaRepository;
     private SolicitaAnaliseClient solicitaAnaliseClient;
@@ -50,5 +55,16 @@ public class PropostasController {
             return ResponseEntity.ok(new CadastraPropostaResponse(optionalProposta.get()));
 
         return ResponseEntity.status(404).build();
+    }
+
+    @Override
+    public Health health() {
+        Map<String, Object> details = new HashMap<>();
+        details.put("versão", "0.1");
+        details.put("descrição", "Cadastro de propostas de cartões!");
+        details.put("endereço", "localhost:8080/api/v1/propostas");
+
+        return Health.status(Status.UP).withDetails(details).build();
+
     }
 }
