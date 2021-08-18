@@ -3,7 +3,7 @@ package br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.con
 import br.com.zup_academy.alisson_prado.proposta.exception.ApiErroException;
 import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.request.CadastraPropostaRequest;
 import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.response.CadastraPropostaResponse;
-import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.SolicitaAnaliseClient;
+import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.analise.SolicitaAnaliseClientFeign;
 import br.com.zup_academy.alisson_prado.proposta.model.Proposta;
 import br.com.zup_academy.alisson_prado.proposta.repository.PropostaRepository;
 import org.springframework.boot.actuate.health.Health;
@@ -24,11 +24,11 @@ import java.util.Optional;
 public class PropostasController implements HealthIndicator {
 
     private PropostaRepository propostaRepository;
-    private SolicitaAnaliseClient solicitaAnaliseClient;
+    private SolicitaAnaliseClientFeign clientFeign;
 
-    public PropostasController(PropostaRepository propostaRepository, SolicitaAnaliseClient solicitaAnaliseClient) {
+    public PropostasController(PropostaRepository propostaRepository, SolicitaAnaliseClientFeign clientFeign) {
         this.propostaRepository = propostaRepository;
-        this.solicitaAnaliseClient = solicitaAnaliseClient;
+        this.clientFeign = clientFeign;
     }
 
     @PostMapping
@@ -39,7 +39,7 @@ public class PropostasController implements HealthIndicator {
         if(proposta.isDocumentoCadastrado(propostaRepository))
             throw new ApiErroException(HttpStatus.UNPROCESSABLE_ENTITY, "É permitido apenas uma proposta por CPF ou CNPJ!");
 
-        proposta.avaliaRestricoes(solicitaAnaliseClient);
+        proposta.avaliaRestricoes(clientFeign);
         propostaRepository.save(proposta);
 
         return ResponseEntity.created(uriBuilder.buildAndExpand("/{uuid}",

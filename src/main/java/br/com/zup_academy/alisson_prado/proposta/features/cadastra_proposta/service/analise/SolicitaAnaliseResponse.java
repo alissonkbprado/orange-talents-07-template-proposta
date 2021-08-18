@@ -1,4 +1,4 @@
-package br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service;
+package br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.analise;
 
 import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.StatusTransacaoPagamento;
 import br.com.zup_academy.alisson_prado.proposta.validacao.EnumNamePattern;
@@ -6,7 +6,7 @@ import br.com.zup_academy.alisson_prado.proposta.validacao.EnumNamePattern;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public class SolicitaAnaliseRequest {
+public class SolicitaAnaliseResponse {
 
     @NotBlank
     private String documento;
@@ -17,7 +17,7 @@ public class SolicitaAnaliseRequest {
     @NotBlank
     private String idProposta;
 
-    public SolicitaAnaliseRequest(String documento, String nome, StatusTransacaoPagamento resultadoSolicitacao, String idProposta) {
+    public SolicitaAnaliseResponse(String documento, String nome, StatusTransacaoPagamento resultadoSolicitacao, String idProposta) {
         this.documento = documento;
         this.nome = nome;
         this.resultadoSolicitacao = resultadoSolicitacao;

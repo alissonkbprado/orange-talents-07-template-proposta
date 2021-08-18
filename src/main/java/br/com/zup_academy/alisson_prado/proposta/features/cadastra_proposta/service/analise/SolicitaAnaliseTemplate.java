@@ -1,4 +1,4 @@
-package br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service;
+package br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.analise;
 
 public class SolicitaAnaliseTemplate {
 

@@ -43,6 +43,9 @@ public class Cliente {
     @OneToMany(mappedBy = "cliente")
     private List<Proposta> propostaList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "cliente")
+    private List<Cartao> cartaoList = new ArrayList<>();
+
     @Deprecated
     private Cliente() {
     }

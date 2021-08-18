@@ -1,8 +1,8 @@
 package br.com.zup_academy.alisson_prado.proposta.model;
 
-import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.SolicitaAnaliseClient;
-import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.SolicitaAnaliseRequest;
-import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.SolicitaAnaliseTemplate;
+import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.analise.SolicitaAnaliseClientFeign;
+import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.analise.SolicitaAnaliseResponse;
+import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.analise.SolicitaAnaliseTemplate;
 import br.com.zup_academy.alisson_prado.proposta.repository.PropostaRepository;
 import feign.FeignException;
 import org.slf4j.Logger;
@@ -76,28 +76,30 @@ public class Proposta {
 
     /**
      * Faz uma requisição POST para API de cartões que verifica se a proposta é elegível
-     * @param client SolicitaAnaliseClient NotNull
+     * @param clientFeign SolicitaAnaliseClientFeign NotNull
      * @return
      */
-    public void avaliaRestricoes(SolicitaAnaliseClient client) {
+    public void avaliaRestricoes(SolicitaAnaliseClientFeign clientFeign) {
         try{
             SolicitaAnaliseTemplate analiseTemplate = new SolicitaAnaliseTemplate(this.cliente.getDocumento(),
                     this.cliente.getNome(),
                     this.idUuid);
 
-            SolicitaAnaliseRequest solicitaAnaliseRequest = client.solicitaAnalise(analiseTemplate);
+            SolicitaAnaliseResponse response = clientFeign.solicitaAnalise(analiseTemplate);
 
             // Se não lançar Exception retorna Status 201 e aprovação da proposta
-            this.status = solicitaAnaliseRequest.getResultadoSolicitacao().getStatusTransacaoPagamento();
+            this.status = response.getResultadoSolicitacao().getStatusTransacaoPagamento();
 
-        } catch (FeignException.FeignClientException.UnprocessableEntity unprocessableEntity){
+        } catch (FeignException.UnprocessableEntity unprocessableEntity){
             // Lança exception 422 caso não tenha sido aprovado
             this.status = StatusProposta.NAO_ELEGIVEL;
         } catch (FeignException e){
             // Qualquer outro código de erro significa que houve falha com a API. Os dados são persistidos com Status AGUARDANDO_APROVACAO
             logger.error("Não foi possível realizar a análise da proposta devido a falha de comunicação com a API de análise.: " + e.getMessage());
         }
+    }
 
-
+    public void aprovaProposta() {
+        this.status = StatusProposta.APROVADO;
     }
 }
