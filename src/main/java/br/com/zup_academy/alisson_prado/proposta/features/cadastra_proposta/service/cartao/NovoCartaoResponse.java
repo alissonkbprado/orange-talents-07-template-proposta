@@ -32,7 +32,7 @@ public class NovoCartaoResponse {
     }
 
     public Cartao toModel(PropostaRepository propostaRepository){
-        Optional<Proposta> optionalProposta = propostaRepository.findByIdUuid(idProposta);
+        Optional<Proposta> optionalProposta = propostaRepository.findByIdProposta(idProposta);
         if (optionalProposta.isPresent())
             return new Cartao(id, emitidoEm, optionalProposta.get().getCliente());
 

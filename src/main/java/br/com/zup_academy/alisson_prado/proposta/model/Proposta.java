@@ -24,7 +24,7 @@ public class Proposta {
 
     @NotNull
     @Column(nullable = false, unique = true)
-    private String idUuid;
+    private String idProposta;
 
     @NotNull
     @ManyToOne(cascade = CascadeType.PERSIST)
@@ -44,7 +44,7 @@ public class Proposta {
     public Proposta(@NotNull Cliente cliente) {
         Assert.notNull(cliente, "Cliente não pode ser nulo");
         this.cliente = cliente;
-        this.idUuid = UUID.randomUUID().toString();
+        this.idProposta = UUID.randomUUID().toString();
         this.status = StatusProposta.AGUARDANDO_APROVACAO;
     }
 
@@ -62,8 +62,8 @@ public class Proposta {
         return id;
     }
 
-    public String getIdUuid() {
-        return idUuid;
+    public String getIdProposta() {
+        return idProposta;
     }
 
     public Cliente getCliente() {
@@ -83,7 +83,7 @@ public class Proposta {
         try{
             SolicitaAnaliseTemplate analiseTemplate = new SolicitaAnaliseTemplate(this.cliente.getDocumento(),
                     this.cliente.getNome(),
-                    this.idUuid);
+                    this.idProposta);
 
             SolicitaAnaliseResponse response = clientFeign.solicitaAnalise(analiseTemplate);
 

@@ -3,6 +3,7 @@ package br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.con
 import br.com.zup_academy.alisson_prado.proposta.exception.ApiErroException;
 import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.request.CadastraPropostaRequest;
 import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.response.CadastraPropostaResponse;
+import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.response.StatusPropostaResponse;
 import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.analise.SolicitaAnaliseClientFeign;
 import br.com.zup_academy.alisson_prado.proposta.model.Proposta;
 import br.com.zup_academy.alisson_prado.proposta.repository.PropostaRepository;
@@ -43,19 +44,32 @@ public class PropostasController implements HealthIndicator {
         propostaRepository.save(proposta);
 
         return ResponseEntity.created(uriBuilder.buildAndExpand("/{uuid}",
-                proposta.getIdUuid()).toUri()).body(new CadastraPropostaResponse(proposta));
+                proposta.getIdProposta()).toUri()).body(new CadastraPropostaResponse(proposta));
     }
 
-    @GetMapping("/{uuid}")
-    public ResponseEntity<?> detalha(@PathVariable String uuid){
+    @GetMapping("/{idProposta}")
+    public ResponseEntity<?> detalha(@PathVariable String idProposta){
 
-        Optional<Proposta> optionalProposta = propostaRepository.findByIdUuid(uuid);
+        Optional<Proposta> optionalProposta = propostaRepository.findByIdProposta(idProposta);
+
+        if(optionalProposta.isPresent())
+            return ResponseEntity.ok(new StatusPropostaResponse(optionalProposta.get()));
+
+        return ResponseEntity.status(404).build();
+    }
+
+    @GetMapping
+    public ResponseEntity<?> status(@RequestParam(name = "idProposta", required = true) String idProposta){
+
+        Optional<Proposta> optionalProposta = propostaRepository.findByIdProposta(idProposta);
 
         if(optionalProposta.isPresent())
             return ResponseEntity.ok(new CadastraPropostaResponse(optionalProposta.get()));
 
         return ResponseEntity.status(404).build();
     }
+
+
 
     @Override
     public Health health() {

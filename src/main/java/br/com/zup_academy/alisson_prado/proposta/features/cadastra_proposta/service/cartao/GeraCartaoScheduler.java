@@ -38,7 +38,7 @@ public class GeraCartaoScheduler {
         if(!propostas.isEmpty())
             propostas.forEach(proposta -> {
                 try {
-                    NovoCartaoResponse cartaoRequest = clientFeign.geraCartao(proposta.getIdUuid());
+                    NovoCartaoResponse cartaoRequest = clientFeign.geraCartao(proposta.getIdProposta());
                     Cartao cartao = cartaoRequest.toModel(propostaRepository);
 
                     if (cartao != null) {

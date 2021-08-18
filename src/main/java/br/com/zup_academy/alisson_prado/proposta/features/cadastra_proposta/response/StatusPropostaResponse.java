@@ -3,17 +3,15 @@ package br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.res
 import br.com.zup_academy.alisson_prado.proposta.model.Proposta;
 import br.com.zup_academy.alisson_prado.proposta.model.StatusProposta;
 
-public class CadastraPropostaResponse {
+public class StatusPropostaResponse {
 
     private String idProposta;
     private String nome;
-    private String email;
     private StatusProposta status;
 
-    public CadastraPropostaResponse(Proposta proposta) {
+    public StatusPropostaResponse(Proposta proposta) {
         this.idProposta = proposta.getIdProposta();
         this.nome = proposta.getCliente().getNome();
-        this.email = proposta.getCliente().getEmail();
         this.status = proposta.getStatus();
     }
 
@@ -21,15 +19,11 @@ public class CadastraPropostaResponse {
         return idProposta;
     }
 
-    public StatusProposta getStatus() {
-        return status;
-    }
-
     public String getNome() {
         return nome;
     }
 
-    public String getEmail() {
-        return email;
+    public StatusProposta getStatus() {
+        return status;
     }
 }

@@ -138,3 +138,8 @@ volumes:
   grafana-volume:
   prometheus-volume:
   postgres-volume:
+
+#networks:
+#  default:
+#    external:
+#      name: redezinha

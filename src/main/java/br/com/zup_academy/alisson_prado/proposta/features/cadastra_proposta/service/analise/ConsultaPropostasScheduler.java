@@ -33,7 +33,7 @@ public class ConsultaPropostasScheduler {
         propostasAguardandoAprovacao.forEach( proposta -> {
             SolicitaAnaliseTemplate analiseTemplate = new SolicitaAnaliseTemplate(proposta.getCliente().getDocumento(),
                     proposta.getCliente().getNome(),
-                    proposta.getIdUuid());
+                    proposta.getIdProposta());
 
             System.out.println("Status Proposta: " + proposta.getId() + " - " + proposta.getStatus());
             proposta.avaliaRestricoes(client);
