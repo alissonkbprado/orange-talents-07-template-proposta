@@ -6,15 +6,21 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 public class Cartao {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
+    @Column(nullable = false, unique = true)
+    private String idCartao;
+
+    @NotBlank
+    @Column(nullable = false, unique = true)
     private String numero;
 
     @NotNull
@@ -22,6 +28,9 @@ public class Cartao {
 
     @ManyToOne
     private Cliente cliente;
+
+    @OneToMany(mappedBy = "cartao")
+    private List<Biometria> biometriaList;
 
     @Deprecated
     private Cartao() {
@@ -40,5 +49,6 @@ public class Cartao {
         this.numero = numero;
         this.dataEmissao = dataEmissao;
         this.cliente = cliente;
+        this.idCartao = UUID.randomUUID().toString();
     }
 }

@@ -43,7 +43,7 @@ public class PropostasController implements HealthIndicator {
         proposta.avaliaRestricoes(clientFeign);
         propostaRepository.save(proposta);
 
-        return ResponseEntity.created(uriBuilder.buildAndExpand("/{uuid}",
+        return ResponseEntity.created(uriBuilder.buildAndExpand("/{idProposta}",
                 proposta.getIdProposta()).toUri()).body(new CadastraPropostaResponse(proposta));
     }
 

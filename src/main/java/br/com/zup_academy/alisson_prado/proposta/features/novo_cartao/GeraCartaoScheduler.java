@@ -47,8 +47,6 @@ public class GeraCartaoScheduler {
                         propostaRepository.save(proposta);
                     }
 
-
-
                 } catch (Exception e){
                     //Não foi possível acessar a API de cartões.
                 }

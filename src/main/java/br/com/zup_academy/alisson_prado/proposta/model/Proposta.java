@@ -16,8 +16,8 @@ import java.util.UUID;
 @Entity
 public class Proposta {
 
-    @Transient
-    private final Logger logger = LoggerFactory.getLogger(Proposta.class);
+//    @Transient
+//    private final Logger logger = LoggerFactory.getLogger(Proposta.class);
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,6 +31,7 @@ public class Proposta {
     private Cliente cliente;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private StatusProposta status;
 
     @Deprecated
@@ -95,7 +96,7 @@ public class Proposta {
             this.status = StatusProposta.NAO_ELEGIVEL;
         } catch (FeignException e){
             // Qualquer outro código de erro significa que houve falha com a API. Os dados são persistidos com Status AGUARDANDO_APROVACAO
-            logger.error("Não foi possível realizar a análise da proposta devido a falha de comunicação com a API de análise.: " + e.getMessage());
+//            logger.error("Não foi possível realizar a análise da proposta devido a falha de comunicação com a API de análise.: " + e.getMessage());
         }
     }
 
