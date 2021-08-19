@@ -19,6 +19,7 @@
 		<spring-cloud.version>Hoxton.SR12</spring-cloud.version>
 <!--		<spring-cloud.version>2020.0.3</spring-cloud.version>-->
 		<ch.qos.logback.version>1.2.3</ch.qos.logback.version>
+		<maven.test.skip>true</maven.test.skip>
 	</properties>
 	<dependencies>
 		<dependency>

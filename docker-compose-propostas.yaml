@@ -1,0 +1,39 @@
+version: '3'
+services:
+
+  mysql:
+    image: mysql:8.0.26
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: propostas
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "3307:3306"
+    networks:
+      - production-network
+    volumes:
+      - mysql-volume:/var/lib/mysql
+
+  propostas:
+#    build:
+#      dockerfile: Dockerfile
+#      context: .
+    image: alissonprado/propostas
+    container_name: propostas
+    ports:
+      - "8080:8080"
+    environment:
+      DATASOURCE_URL: jdbc:mysql://mysql:3306/propostas?createDatabaseIfNotExist=TRUE&useTimezone=true&serverTimezone=America/Sao_Paulo
+      DATASOURCE_USER: root
+      DATASOURCE_PASSWORD: root
+    networks:
+      - production-network
+    depends_on:
+      - mysql
+
+volumes:
+  mysql-volume:
+
+networks:
+  production-network:

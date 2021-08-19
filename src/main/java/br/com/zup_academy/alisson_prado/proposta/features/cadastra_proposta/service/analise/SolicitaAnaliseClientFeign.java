@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 @FeignClient(name = "solicita-analise", url = "${analise.host}")
 public interface SolicitaAnaliseClientFeign {
 
-    @PostMapping("${analise.endpoint-analise}")
+    @PostMapping("${analise.solicitacao-analise}")
     SolicitaAnaliseResponse solicitaAnalise(SolicitaAnaliseTemplate template);
 }

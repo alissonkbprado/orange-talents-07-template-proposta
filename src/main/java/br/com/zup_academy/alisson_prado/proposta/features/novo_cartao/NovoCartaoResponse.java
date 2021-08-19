@@ -1,4 +1,4 @@
-package br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.cartao;
+package br.com.zup_academy.alisson_prado.proposta.features.novo_cartao;
 
 import br.com.zup_academy.alisson_prado.proposta.model.Cartao;
 import br.com.zup_academy.alisson_prado.proposta.model.Proposta;

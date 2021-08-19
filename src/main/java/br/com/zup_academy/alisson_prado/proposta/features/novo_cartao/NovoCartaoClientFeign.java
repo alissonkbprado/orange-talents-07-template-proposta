@@ -1,4 +1,4 @@
-package br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.cartao;
+package br.com.zup_academy.alisson_prado.proposta.features.novo_cartao;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
