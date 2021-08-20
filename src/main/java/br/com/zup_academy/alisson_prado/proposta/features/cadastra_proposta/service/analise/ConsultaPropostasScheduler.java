@@ -6,9 +6,6 @@ import br.com.zup_academy.alisson_prado.proposta.repository.PropostaRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import java.util.List;
 
 @Component
@@ -31,7 +28,7 @@ public class ConsultaPropostasScheduler {
     @Scheduled(initialDelay = 10000, fixedDelayString = "${periodicidade.consultaPropostasAguardandoAprovacao}")
     private void consultaPropostasAguardandoAprovacao(){
 
-        List<Proposta> propostasAguardandoAprovacao = propostaRepository.findByStatus(StatusProposta.AGUARDANDO_APROVACAO);
+        List<Proposta> propostasAguardandoAprovacao = propostaRepository.findFirst100ByStatus(StatusProposta.AGUARDANDO_APROVACAO);
 
         propostasAguardandoAprovacao.forEach( proposta -> {
             SolicitaAnaliseTemplate analiseTemplate = new SolicitaAnaliseTemplate(proposta.getCliente().getDocumento(),

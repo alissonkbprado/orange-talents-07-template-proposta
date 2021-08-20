@@ -33,7 +33,7 @@ public class GeraCartaoScheduler {
     @Scheduled(initialDelay = 10000, fixedDelayString = "${periodicidade.geraCartao}")
     private void geraCartao(){
 
-        List<Proposta> propostas = propostaRepository.findByStatus(StatusProposta.ELEGIVEL);
+        List<Proposta> propostas = propostaRepository.findFirst100ByStatus(StatusProposta.ELEGIVEL);
 
         if(!propostas.isEmpty())
             propostas.forEach(proposta -> {

@@ -177,7 +177,7 @@ services:
     image: alissonprado/propostas
     container_name: propostas
     ports:
-      - "8080:8080"
+      - "8080:8081"
     environment:
       DATASOURCE_URL: jdbc:mysql://mysql:3306/propostas?createDatabaseIfNotExist=TRUE&useTimezone=true&serverTimezone=America/Sao_Paulo
       DATASOURCE_USER: root

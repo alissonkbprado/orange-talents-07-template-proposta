@@ -2,6 +2,7 @@ package br.com.zup_academy.alisson_prado.proposta.features.cadastra_biometria.co
 
 import br.com.zup_academy.alisson_prado.proposta.exception.ApiErroException;
 import br.com.zup_academy.alisson_prado.proposta.features.cadastra_biometria.request.CadastroBiometriaRequest;
+import br.com.zup_academy.alisson_prado.proposta.features.cadastra_biometria.response.CadastroBiometriaResponse;
 import br.com.zup_academy.alisson_prado.proposta.model.Biometria;
 import br.com.zup_academy.alisson_prado.proposta.model.Cartao;
 import br.com.zup_academy.alisson_prado.proposta.repository.BiometriaRepository;
@@ -17,7 +18,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/propostas/biometrias")
+@RequestMapping("/api/v1/biometrias")
 public class CadastraBiometriaController {
 
     CartaoRepository cartaoRepository;
@@ -42,8 +43,21 @@ public class CadastraBiometriaController {
 
         biometriaRepository.save(biometria);
 
-        return ResponseEntity.created(uriBuilder.buildAndExpand("/{idBiometria}",
-                biometria.getIdBiometria()).toUri()).body("Biometria cadastrada com sucesso");
+        return ResponseEntity.created(uriBuilder
+                .path("/{idBiometria}")
+                .buildAndExpand(biometria.getIdBiometria()).toUri())
+                .body("Biometria cadastrada com sucesso");
+    }
+
+    @GetMapping("/{idBiometria}")
+    public ResponseEntity<?> detalha(@PathVariable String idBiometria){
+
+        Optional<Biometria> optionalBiometria = biometriaRepository.findByIdBiometria(idBiometria);
+
+        if(optionalBiometria.isPresent())
+            return ResponseEntity.ok(new CadastroBiometriaResponse(optionalBiometria.get().getBiometria()));
+
+        return ResponseEntity.status(404).build();
     }
 
 }

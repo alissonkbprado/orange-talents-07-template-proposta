@@ -43,8 +43,10 @@ public class PropostasController implements HealthIndicator {
         proposta.avaliaRestricoes(clientFeign);
         propostaRepository.save(proposta);
 
-        return ResponseEntity.created(uriBuilder.buildAndExpand("/{idProposta}",
-                proposta.getIdProposta()).toUri()).body(new CadastraPropostaResponse(proposta));
+        return ResponseEntity.created(uriBuilder
+                .path("/{idProposta}")
+                .buildAndExpand(proposta.getIdProposta()).toUri())
+                .body(new CadastraPropostaResponse(proposta));
     }
 
     @GetMapping("/{idProposta}")
