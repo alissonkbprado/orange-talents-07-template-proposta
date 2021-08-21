@@ -4,6 +4,7 @@ import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.serv
 import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.analise.SolicitaAnaliseResponse;
 import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.analise.SolicitaAnaliseTemplate;
 import br.com.zup_academy.alisson_prado.proposta.repository.PropostaRepository;
+import br.com.zup_academy.alisson_prado.proposta.validacao.Uuid;
 import feign.FeignException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ public class Proposta {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotNull @Uuid
     @Column(nullable = false, unique = true)
     private String idProposta;
 

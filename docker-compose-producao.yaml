@@ -182,6 +182,8 @@ services:
       DATASOURCE_URL: jdbc:mysql://mysql:3306/propostas?createDatabaseIfNotExist=TRUE&useTimezone=true&serverTimezone=America/Sao_Paulo
       DATASOURCE_USER: root
       DATASOURCE_PASSWORD: root
+      KEYCLOAK_ISSUER_URI: http://keycloak:8080/auth/realms/propostas
+      EYCLOAK_JWKS_URI: http://keycloak:8080/auth/realms/propostas/protocol/openid-connect/certs
       ANALISE_URL: http://analise:9999
       ANALISE_SOLICITACAO_URL: /api/solicitacao
       CARTOES_URL: http://contas:8888

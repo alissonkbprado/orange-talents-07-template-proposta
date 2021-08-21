@@ -11,47 +11,47 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-public class Biometria {
+public class Bloqueio {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank @Uuid
-    @Column(nullable = false, unique = true)
-    private String idBiometria;
-
-    @NotBlank
-    @Column(nullable = false)
-    private String biometria;
+    private String idBloqueio;
 
     @CreationTimestamp
-    private LocalDateTime dataCadastro;
+    private LocalDateTime data;
+
+    @NotBlank
+    private String ipAddress;
+
+    @NotBlank
+    private String userAgent;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Cartao cartao;
 
-    @Deprecated
-    private Biometria() {
+    private Bloqueio() {
     }
 
     /**
      *
-     * @param biometriaDecodificada Decodificada, NotBlank
+     * @param ipAddress NotBlank
+     * @param userAgent NotBlank
+     * @param cartao NoNull
      */
-    public Biometria(@NotBlank String biometriaDecodificada, @NotNull Cartao cartao) {
-        Assert.hasText(biometriaDecodificada, "Campo obrigatório");
+    public Bloqueio(@NotBlank String ipAddress, @NotBlank String userAgent, @NotNull Cartao cartao) {
+        Assert.hasText(ipAddress, "Campo obrigatório");
+        Assert.hasText(userAgent, "Campo obrigatório");
         Assert.notNull(cartao, "Campo não pode ser nulo");
 
-        this.biometria = biometriaDecodificada;
+        this.ipAddress = ipAddress;
+        this.userAgent = userAgent;
         this.cartao = cartao;
-        this.idBiometria = UUID.randomUUID().toString();
+        this.idBloqueio = UUID.randomUUID().toString();
     }
 
-    public String getIdBiometria() {
-        return idBiometria;
-    }
-
-    public String getBiometria() {
-        return biometria;
+    public String getIdBloqueio() {
+        return idBloqueio;
     }
 }

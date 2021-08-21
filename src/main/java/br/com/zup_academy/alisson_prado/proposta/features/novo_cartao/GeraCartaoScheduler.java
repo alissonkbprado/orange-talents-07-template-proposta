@@ -5,6 +5,8 @@ import br.com.zup_academy.alisson_prado.proposta.model.Proposta;
 import br.com.zup_academy.alisson_prado.proposta.model.StatusProposta;
 import br.com.zup_academy.alisson_prado.proposta.repository.CartaoRepository;
 import br.com.zup_academy.alisson_prado.proposta.repository.PropostaRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +18,7 @@ public class GeraCartaoScheduler {
     private PropostaRepository propostaRepository;
     private CartaoRepository cartaoRepository;
     private NovoCartaoClientFeign clientFeign;
+    private final Logger logger = LoggerFactory.getLogger(Proposta.class);
 
     public GeraCartaoScheduler(PropostaRepository propostaRepository, CartaoRepository cartaoRepository, NovoCartaoClientFeign clientFeign) {
         this.propostaRepository = propostaRepository;
@@ -49,6 +52,7 @@ public class GeraCartaoScheduler {
 
                 } catch (Exception e){
                     //Não foi possível acessar a API de cartões.
+                    logger.error("Não foi possível gerar o número do cartão devido a falha de comunicação com a API de cartões.: " + e.getMessage());
                 }
             });
 

@@ -35,12 +35,8 @@ public class ConsultaPropostasScheduler {
                     proposta.getCliente().getNome(),
                     proposta.getIdProposta());
 
-            System.out.println("Status Proposta: " + proposta.getId() + " - " + proposta.getStatus());
             proposta.avaliaRestricoes(client);
             propostaRepository.save(proposta);
-
-            System.out.println("Status Proposta depois da avaliação: " + proposta.getId() + " - " + proposta.getStatus());
-
         });
     }
 }

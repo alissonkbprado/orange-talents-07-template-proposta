@@ -9,16 +9,18 @@ import br.com.zup_academy.alisson_prado.proposta.repository.BiometriaRepository;
 import br.com.zup_academy.alisson_prado.proposta.repository.CartaoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.Optional;
 
+import static br.com.zup_academy.alisson_prado.proposta.compartilhado.ValidaUuid.isUuidNotValid;
+
 @RestController
-@RequestMapping("/api/v1/biometrias")
+@RequestMapping("/api/v1/cartao")
 public class CadastraBiometriaController {
 
     CartaoRepository cartaoRepository;
@@ -29,10 +31,14 @@ public class CadastraBiometriaController {
         this.biometriaRepository = biometriaRepository;
     }
 
-    @PostMapping
-    public ResponseEntity<?> cadastra(@Validated @RequestParam(name = "idCartao", required = true) @NotBlank String idCartao,
+    @PostMapping("/biometria")
+    @Transactional
+    public ResponseEntity<?> cadastra(@RequestParam(name = "idCartao", required = true) @NotBlank String idCartao,
                                       @RequestBody @Valid CadastroBiometriaRequest request,
                                       UriComponentsBuilder uriBuilder){
+
+        if(idCartao == null || idCartao.isBlank() || isUuidNotValid(idCartao))
+            throw new ApiErroException(HttpStatus.BAD_REQUEST, "Identificador do cartão não foi enviado ou é inválido.");
 
         Optional<Cartao> optionalCartao = cartaoRepository.findByIdCartao(idCartao);
 
@@ -44,13 +50,13 @@ public class CadastraBiometriaController {
         biometriaRepository.save(biometria);
 
         return ResponseEntity.created(uriBuilder
-                .path("/{idBiometria}")
+                .path("/biometria/{idBiometria}")
                 .buildAndExpand(biometria.getIdBiometria()).toUri())
                 .body("Biometria cadastrada com sucesso");
     }
 
-    @GetMapping("/{idBiometria}")
-    public ResponseEntity<?> detalha(@PathVariable String idBiometria){
+    @GetMapping("/biometria/{idBiometria}")
+    public ResponseEntity<?> detalha(@PathVariable @NotBlank String idBiometria){
 
         Optional<Biometria> optionalBiometria = biometriaRepository.findByIdBiometria(idBiometria);
 
