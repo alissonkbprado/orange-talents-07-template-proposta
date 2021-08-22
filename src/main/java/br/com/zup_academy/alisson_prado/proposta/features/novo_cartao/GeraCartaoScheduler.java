@@ -33,7 +33,7 @@ public class GeraCartaoScheduler {
      * Dados do Cartão persistidos na entidade Cartao.
      * A proposta é atualizada para Status APROVADO.
      */
-    @Scheduled(initialDelay = 10000, fixedDelayString = "${periodicidade.geraCartao}")
+    @Scheduled(initialDelay = 15000, fixedDelayString = "${periodicidade.geraCartao}")
     private void geraCartao(){
 
         List<Proposta> propostas = propostaRepository.findFirst100ByStatus(StatusProposta.ELEGIVEL);
@@ -55,6 +55,5 @@ public class GeraCartaoScheduler {
                     logger.error("Não foi possível gerar o número do cartão devido a falha de comunicação com a API de cartões.: " + e.getMessage());
                 }
             });
-
     }
 }

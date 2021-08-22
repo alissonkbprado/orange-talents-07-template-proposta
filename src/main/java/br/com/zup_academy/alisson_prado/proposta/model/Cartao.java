@@ -1,6 +1,11 @@
 package br.com.zup_academy.alisson_prado.proposta.model;
 
+import br.com.zup_academy.alisson_prado.proposta.features.bloqueio_cartao.BloqueiaCartaoClientFeign;
+import br.com.zup_academy.alisson_prado.proposta.features.bloqueio_cartao.BloqueiaCartaoTemplate;
 import br.com.zup_academy.alisson_prado.proposta.validacao.Uuid;
+import feign.FeignException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -13,6 +18,9 @@ import java.util.UUID;
 
 @Entity
 public class Cartao {
+
+    @Transient
+    private final Logger logger = LoggerFactory.getLogger(Proposta.class);
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,8 +39,8 @@ public class Cartao {
     @ManyToOne
     private Cliente cliente;
 
-    @NotNull
-    private boolean bloqueado;
+    @NotNull @Enumerated(EnumType.STRING)
+    private StatusCartao status;
 
     @OneToMany(mappedBy = "cartao")
     private List<Biometria> biometriaList = new ArrayList<>();
@@ -42,6 +50,10 @@ public class Cartao {
 
     @Deprecated
     private Cartao() {
+    }
+
+    public Cartao(Long id) {
+        this.id = id;
     }
 
     /**
@@ -58,14 +70,37 @@ public class Cartao {
         this.dataEmissao = dataEmissao;
         this.cliente = cliente;
         this.idCartao = UUID.randomUUID().toString();
-        this.bloqueado = false;
+        this.status = StatusCartao.ATIVO;
     }
 
     public boolean isBloqueado() {
-        return bloqueado;
+        if(this.status.equals(StatusCartao.BLOQUEADO))
+            return true;
+
+        return false;
     }
 
-    public void bloqueia() {
-        this.bloqueado = true;
+    public boolean bloqueia(BloqueiaCartaoClientFeign bloqueiaCartaoClientFeign) {
+        try{
+            bloqueiaCartaoClientFeign.bloqueiaCartao(this.numero, new BloqueiaCartaoTemplate("Sistema Propostas"));
+            this.status = StatusCartao.BLOQUEADO;
+            return true;
+        } catch (FeignException.FeignClientException.UnprocessableEntity e) {
+            // Este retorno indica que o cartão já está bloquado
+            this.status = StatusCartao.BLOQUEADO;
+            return true;
+        } catch (Exception e) {
+            this.status = StatusCartao.AGUARDANDO_BLOQUEIO;
+            logger.error("Não foi possível bloquear o cartão devido a falha de comunicação com a API de cartões: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getNumero() {
+        return numero;
     }
 }

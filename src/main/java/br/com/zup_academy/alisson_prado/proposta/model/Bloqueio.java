@@ -28,7 +28,10 @@ public class Bloqueio {
     @NotBlank
     private String userAgent;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @NotNull @Enumerated(EnumType.STRING)
+    private StatusBloqueio statusBloqueio;
+
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Cartao cartao;
 
     private Bloqueio() {
@@ -40,13 +43,15 @@ public class Bloqueio {
      * @param userAgent NotBlank
      * @param cartao NoNull
      */
-    public Bloqueio(@NotBlank String ipAddress, @NotBlank String userAgent, @NotNull Cartao cartao) {
+    public Bloqueio(@NotBlank String ipAddress, @NotBlank String userAgent, @NotNull StatusBloqueio statusBloqueio, @NotNull Cartao cartao) {
         Assert.hasText(ipAddress, "Campo obrigatório");
         Assert.hasText(userAgent, "Campo obrigatório");
+        Assert.notNull(statusBloqueio, "Campo não pode ser nulo");
         Assert.notNull(cartao, "Campo não pode ser nulo");
 
         this.ipAddress = ipAddress;
         this.userAgent = userAgent;
+        this.statusBloqueio = statusBloqueio;
         this.cartao = cartao;
         this.idBloqueio = UUID.randomUUID().toString();
     }
