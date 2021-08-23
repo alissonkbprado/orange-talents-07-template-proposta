@@ -1,6 +1,7 @@
-package br.com.zup_academy.alisson_prado.proposta.features.bloqueio_cartao;
+package br.com.zup_academy.alisson_prado.proposta.features.bloqueio_cartao.controller;
 
 import br.com.zup_academy.alisson_prado.proposta.exception.ApiErroException;
+import br.com.zup_academy.alisson_prado.proposta.features.bloqueio_cartao.service.BloqueiaCartaoClientFeign;
 import br.com.zup_academy.alisson_prado.proposta.model.Bloqueio;
 import br.com.zup_academy.alisson_prado.proposta.model.Cartao;
 import br.com.zup_academy.alisson_prado.proposta.model.StatusBloqueio;

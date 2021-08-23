@@ -11,23 +11,29 @@ import javax.validation.constraints.Size;
 public class Endereco {
 
     @NotBlank
+    @Column(nullable = false)
     private String logradouro;
 
     @NotBlank
+    @Column(nullable = false)
     private String numero;
 
     private String complemento;
 
     @NotBlank
+    @Column(nullable = false)
     private String bairro;
 
     @NotBlank
+    @Column(nullable = false)
     private String cidade;
 
     @NotBlank @Size(min = 2, max = 2) @UF
+    @Column(nullable = false)
     private String uf;
 
     @NotBlank
+    @Column(nullable = false)
     private String pais;
 
     @Deprecated

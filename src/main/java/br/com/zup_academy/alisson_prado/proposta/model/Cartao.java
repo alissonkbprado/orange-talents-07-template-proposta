@@ -1,7 +1,7 @@
 package br.com.zup_academy.alisson_prado.proposta.model;
 
-import br.com.zup_academy.alisson_prado.proposta.features.bloqueio_cartao.BloqueiaCartaoClientFeign;
-import br.com.zup_academy.alisson_prado.proposta.features.bloqueio_cartao.BloqueiaCartaoTemplate;
+import br.com.zup_academy.alisson_prado.proposta.features.bloqueio_cartao.service.BloqueiaCartaoClientFeign;
+import br.com.zup_academy.alisson_prado.proposta.features.bloqueio_cartao.service.BloqueiaCartaoTemplate;
 import br.com.zup_academy.alisson_prado.proposta.validacao.Uuid;
 import feign.FeignException;
 import org.slf4j.Logger;
@@ -34,12 +34,14 @@ public class Cartao {
     private String numero;
 
     @NotNull
+    @Column(nullable = false)
     private LocalDateTime dataEmissao;
 
     @ManyToOne
     private Cliente cliente;
 
     @NotNull @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private StatusCartao status;
 
     @OneToMany(mappedBy = "cartao")
@@ -47,6 +49,9 @@ public class Cartao {
 
     @OneToMany(mappedBy = "cartao")
     private List<Bloqueio> bloqueioList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "cartao")
+    private List<AvisoViagem> avisoViagemList = new ArrayList<>();
 
     @Deprecated
     private Cartao() {

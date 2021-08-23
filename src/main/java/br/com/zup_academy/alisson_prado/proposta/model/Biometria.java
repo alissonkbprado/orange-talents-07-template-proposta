@@ -27,6 +27,7 @@ public class Biometria {
     @CreationTimestamp
     private LocalDateTime dataCadastro;
 
+    @NotNull
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Cartao cartao;
 

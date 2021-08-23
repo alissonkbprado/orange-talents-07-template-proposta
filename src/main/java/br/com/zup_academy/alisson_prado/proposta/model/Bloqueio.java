@@ -17,20 +17,25 @@ public class Bloqueio {
     private Long id;
 
     @NotBlank @Uuid
+    @Column(nullable = false, unique = true)
     private String idBloqueio;
 
     @CreationTimestamp
     private LocalDateTime data;
 
     @NotBlank
+    @Column(nullable = false)
     private String ipAddress;
 
     @NotBlank
+    @Column(nullable = false)
     private String userAgent;
 
     @NotNull @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private StatusBloqueio statusBloqueio;
 
+    @NotNull
     @ManyToOne(cascade = CascadeType.MERGE)
     private Cartao cartao;
 

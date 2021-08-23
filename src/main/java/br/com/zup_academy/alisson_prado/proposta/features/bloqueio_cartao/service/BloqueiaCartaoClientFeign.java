@@ -1,4 +1,4 @@
-package br.com.zup_academy.alisson_prado.proposta.features.bloqueio_cartao;
+package br.com.zup_academy.alisson_prado.proposta.features.bloqueio_cartao.service;
 
 import br.com.zup_academy.alisson_prado.proposta.features.novo_cartao.NovoCartaoResponse;
 import org.springframework.cloud.openfeign.FeignClient;

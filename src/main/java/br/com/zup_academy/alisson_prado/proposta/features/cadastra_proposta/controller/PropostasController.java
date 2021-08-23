@@ -60,27 +60,9 @@ public class PropostasController implements HealthIndicator {
         Optional<Proposta> optionalProposta = propostaRepository.findByIdProposta(idProposta);
 
         if(optionalProposta.isPresent())
-            return ResponseEntity.ok(new StatusPropostaResponse(optionalProposta.get()));
+            return ResponseEntity.ok(new CadastraPropostaResponse(optionalProposta.get()));
 
         return ResponseEntity.status(404).build();
-    }
-
-    @GetMapping
-    public ResponseEntity<?> status(@RequestParam(name = "idProposta", required = true) String idProposta){
-        Collection<Tag> tags = new ArrayList<>();
-        tags.add(Tag.of("emissora", "Mastercard"));
-        tags.add(Tag.of("banco", "Itaú"));
-
-        Timer timerConsultarProposta = this.meterRegistry.timer("consulta_proposta", tags);
-
-        return timerConsultarProposta.record(() -> {
-            Optional<Proposta> optionalProposta = propostaRepository.findByIdProposta(idProposta);
-
-            if(optionalProposta.isPresent())
-                return ResponseEntity.ok(new CadastraPropostaResponse(optionalProposta.get()));
-
-            return ResponseEntity.status(404).build();
-        });
     }
 
 

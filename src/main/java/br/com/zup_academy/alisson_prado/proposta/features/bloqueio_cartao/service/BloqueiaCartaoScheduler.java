@@ -1,6 +1,5 @@
 package br.com.zup_academy.alisson_prado.proposta.features.bloqueio_cartao.service;
 
-import br.com.zup_academy.alisson_prado.proposta.features.bloqueio_cartao.BloqueiaCartaoClientFeign;
 import br.com.zup_academy.alisson_prado.proposta.model.*;
 import br.com.zup_academy.alisson_prado.proposta.repository.BloqueiaCartaoRepository;
 import br.com.zup_academy.alisson_prado.proposta.repository.CartaoRepository;
@@ -43,7 +42,7 @@ public class BloqueiaCartaoScheduler {
      * Dados do Bloqueio persistidos na entidade Bloqueio.
      * O StatusCartao é atualizado para StatusCartao.BLOQUEADO.
      */
-    @Scheduled(initialDelay = 18000, fixedDelayString = "${periodicidade.geraCartao}")
+    @Scheduled(initialDelay = 18000, fixedDelayString = "${periodicidade.bloqueiaCartao}")
     private void bloqueiaCartao(){
 
         List<Cartao> cartaoList = cartaoRepository.findFirst100ByStatus(StatusCartao.AGUARDANDO_BLOQUEIO);
