@@ -7,6 +7,10 @@ import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.resp
 import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.analise.SolicitaAnaliseClientFeign;
 import br.com.zup_academy.alisson_prado.proposta.model.Proposta;
 import br.com.zup_academy.alisson_prado.proposta.repository.PropostaRepository;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Tag;
+import io.micrometer.core.instrument.Timer;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.Status;
@@ -16,9 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1/propostas")
@@ -26,10 +28,12 @@ public class PropostasController implements HealthIndicator {
 
     private PropostaRepository propostaRepository;
     private SolicitaAnaliseClientFeign clientFeign;
+    private final MeterRegistry meterRegistry;
 
-    public PropostasController(PropostaRepository propostaRepository, SolicitaAnaliseClientFeign clientFeign) {
+    public PropostasController(PropostaRepository propostaRepository, SolicitaAnaliseClientFeign clientFeign, MeterRegistry meterRegistry) {
         this.propostaRepository = propostaRepository;
         this.clientFeign = clientFeign;
+        this.meterRegistry = meterRegistry;
     }
 
     @PostMapping
@@ -43,6 +47,8 @@ public class PropostasController implements HealthIndicator {
         proposta.avaliaRestricoes(clientFeign);
         propostaRepository.save(proposta);
 
+        metricaContadorPropostaCriada();
+
         return ResponseEntity.created(uriBuilder
                 .path("/{idProposta}")
                 .buildAndExpand(proposta.getIdProposta()).toUri())
@@ -51,7 +57,6 @@ public class PropostasController implements HealthIndicator {
 
     @GetMapping("/{idProposta}")
     public ResponseEntity<?> detalha(@PathVariable String idProposta){
-
         Optional<Proposta> optionalProposta = propostaRepository.findByIdProposta(idProposta);
 
         if(optionalProposta.isPresent())
@@ -62,13 +67,20 @@ public class PropostasController implements HealthIndicator {
 
     @GetMapping
     public ResponseEntity<?> status(@RequestParam(name = "idProposta", required = true) String idProposta){
+        Collection<Tag> tags = new ArrayList<>();
+        tags.add(Tag.of("emissora", "Mastercard"));
+        tags.add(Tag.of("banco", "Itaú"));
 
-        Optional<Proposta> optionalProposta = propostaRepository.findByIdProposta(idProposta);
+        Timer timerConsultarProposta = this.meterRegistry.timer("consulta_proposta", tags);
 
-        if(optionalProposta.isPresent())
-            return ResponseEntity.ok(new CadastraPropostaResponse(optionalProposta.get()));
+        return timerConsultarProposta.record(() -> {
+            Optional<Proposta> optionalProposta = propostaRepository.findByIdProposta(idProposta);
 
-        return ResponseEntity.status(404).build();
+            if(optionalProposta.isPresent())
+                return ResponseEntity.ok(new CadastraPropostaResponse(optionalProposta.get()));
+
+            return ResponseEntity.status(404).build();
+        });
     }
 
 
@@ -82,5 +94,16 @@ public class PropostasController implements HealthIndicator {
 
         return Health.status(Status.UP).withDetails(details).build();
 
+    }
+
+    // Métrica tipo Counter
+    public void metricaContadorPropostaCriada() {
+        Collection<Tag> tags = new ArrayList<>();
+        tags.add(Tag.of("emissora", "Mastercard"));
+        tags.add(Tag.of("banco", "Itaú"));
+
+        Counter contadorDePropostasCriadas = this.meterRegistry.counter("proposta_criada", tags);
+
+        contadorDePropostasCriadas.increment();
     }
 }
