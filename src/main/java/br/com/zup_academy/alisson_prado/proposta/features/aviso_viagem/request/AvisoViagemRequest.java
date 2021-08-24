@@ -1,4 +1,4 @@
-package br.com.zup_academy.alisson_prado.proposta.features.aviso_viagem;
+package br.com.zup_academy.alisson_prado.proposta.features.aviso_viagem.request;
 
 import br.com.zup_academy.alisson_prado.proposta.exception.ApiErroException;
 import br.com.zup_academy.alisson_prado.proposta.model.AvisoViagem;

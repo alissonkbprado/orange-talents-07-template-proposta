@@ -204,6 +204,7 @@ services:
       CARTOES_URL: http://contas:8888
       CARTOES_NOVO_CARTAO_URL: /api/cartoes
       CARTOES_BLOQUEIA_CARTAO_URL: /api/cartoes/{id}/bloqueios
+      CARTOES_AVISO_VIAGEM_CARTAO_URL: /api/cartoes/{id}/avisos
       TZ: America/Sao_Paulo
 #    networks:
 #      - production-network

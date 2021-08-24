@@ -1,6 +1,8 @@
-package br.com.zup_academy.alisson_prado.proposta.features.aviso_viagem;
+package br.com.zup_academy.alisson_prado.proposta.features.aviso_viagem.controller;
 
 import br.com.zup_academy.alisson_prado.proposta.exception.ApiErroException;
+import br.com.zup_academy.alisson_prado.proposta.features.aviso_viagem.request.AvisoViagemRequest;
+import br.com.zup_academy.alisson_prado.proposta.features.aviso_viagem.service.AvisoViagemService;
 import br.com.zup_academy.alisson_prado.proposta.model.AvisoViagem;
 import br.com.zup_academy.alisson_prado.proposta.model.Cartao;
 import br.com.zup_academy.alisson_prado.proposta.repository.AvisoViagemRepository;
@@ -24,10 +26,12 @@ public class AvisoViagemController {
 
     private CartaoRepository cartaoRepository;
     private AvisoViagemRepository avisoViagemRepository;
+    private AvisoViagemService avisoViagemService;
 
-    public AvisoViagemController(CartaoRepository cartaoRepository, AvisoViagemRepository avisoViagemRepository) {
+    public AvisoViagemController(CartaoRepository cartaoRepository, AvisoViagemRepository avisoViagemRepository, AvisoViagemService avisoViagemService) {
         this.cartaoRepository = cartaoRepository;
         this.avisoViagemRepository = avisoViagemRepository;
+        this.avisoViagemService = avisoViagemService;
     }
 
     @PostMapping("/api/v1/cartao/{idCartao}/aviso_viagem")
@@ -45,8 +49,14 @@ public class AvisoViagemController {
 
         AvisoViagem avisoViagem = request.toModel(cartao, httpServletRequest, avisoViagemRepository);
 
-        avisoViagemRepository.save(avisoViagem);
+        if (avisoViagemService.enviaAvisoApi(cartao.getNumero(), request.getPaisDestino(), request.getDataTermino())){
+            avisoViagemRepository.save(avisoViagem);
+            return ResponseEntity.ok().body("Aviso viagem cadastrado com sucesso.");
+        }
 
-        return ResponseEntity.ok().body("Aviso viagem cadastrado com sucesso.");
+        throw new ApiErroException(HttpStatus.INTERNAL_SERVER_ERROR, "Não foi possível efetuar o cadastro de aviso viagem no momento devido a falha de comunicação " +
+                "com a operadora de cartão de crédito. Por favor tente novamente mais tarde.");
+
+
     }
 }
