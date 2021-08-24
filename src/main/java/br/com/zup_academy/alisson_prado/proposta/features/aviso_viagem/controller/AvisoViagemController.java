@@ -54,7 +54,7 @@ public class AvisoViagemController {
             return ResponseEntity.ok().body("Aviso viagem cadastrado com sucesso.");
         }
 
-        throw new ApiErroException(HttpStatus.INTERNAL_SERVER_ERROR, "Não foi possível efetuar o cadastro de aviso viagem no momento devido a falha de comunicação " +
+        throw new ApiErroException(HttpStatus.SERVICE_UNAVAILABLE, "Não foi possível efetuar o cadastro de aviso viagem no momento devido a falha de comunicação " +
                 "com a operadora de cartão de crédito. Por favor tente novamente mais tarde.");
 
 

@@ -1,6 +1,7 @@
-package br.com.zup_academy.alisson_prado.proposta.features.cadastra_carteira_digital;
+package br.com.zup_academy.alisson_prado.proposta.features.cadastra_carteira_digital.controller;
 
 import br.com.zup_academy.alisson_prado.proposta.exception.ApiErroException;
+import br.com.zup_academy.alisson_prado.proposta.features.cadastra_carteira_digital.request.CadastraCarteiraDigitalRequest;
 import br.com.zup_academy.alisson_prado.proposta.features.cadastra_carteira_digital.service.CadastraCarteiraDigitalService;
 import br.com.zup_academy.alisson_prado.proposta.model.Cartao;
 import br.com.zup_academy.alisson_prado.proposta.model.CarteiraDigital;

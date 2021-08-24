@@ -32,7 +32,7 @@ public class CarteiraDigital {
     private String email;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(nullable = false) @Enumerated(EnumType.STRING)
 	private StatusCarteiraDigital status;
 
     @ManyToOne

@@ -1,4 +1,4 @@
-package br.com.zup_academy.alisson_prado.proposta.features.cadastra_carteira_digital;
+package br.com.zup_academy.alisson_prado.proposta.features.cadastra_carteira_digital.request;
 
 import br.com.zup_academy.alisson_prado.proposta.exception.ApiErroException;
 import br.com.zup_academy.alisson_prado.proposta.model.Cartao;
@@ -17,7 +17,7 @@ public class CadastraCarteiraDigitalRequest {
     @NotBlank @Email
     private String email;
 
-    @NotNull @EnumNamePattern(regexp = "PAYPAL")
+    @NotNull @EnumNamePattern(regexp = "PAYPAL|SAMSUNG_PAY")
     private NomeCarteiraDigital carteiraDigital;
 
     public CadastraCarteiraDigitalRequest(String email, NomeCarteiraDigital carteiraDigital) {

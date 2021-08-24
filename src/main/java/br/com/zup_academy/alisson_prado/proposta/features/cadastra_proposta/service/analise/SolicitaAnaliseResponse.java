@@ -1,6 +1,6 @@
 package br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.analise;
 
-import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.StatusTransacaoPagamento;
+import br.com.zup_academy.alisson_prado.proposta.model.StatusTransacaoPagamento;
 import br.com.zup_academy.alisson_prado.proposta.validacao.EnumNamePattern;
 
 import javax.validation.constraints.NotBlank;

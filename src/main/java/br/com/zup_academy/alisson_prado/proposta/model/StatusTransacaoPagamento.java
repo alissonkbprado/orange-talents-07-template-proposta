@@ -1,6 +1,4 @@
-package br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta;
-
-import br.com.zup_academy.alisson_prado.proposta.model.StatusProposta;
+package br.com.zup_academy.alisson_prado.proposta.model;
 
 public enum StatusTransacaoPagamento {
     SEM_RESTRICAO{
