@@ -53,6 +53,9 @@ public class Cartao {
     @OneToMany(mappedBy = "cartao")
     private List<AvisoViagem> avisoViagemList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "cartao")
+    private List<CarteiraDigital> carteiraDigitalList = new ArrayList<>();
+
     @Deprecated
     private Cartao() {
     }
@@ -103,6 +106,10 @@ public class Cartao {
 
     public Long getId() {
         return id;
+    }
+
+    public String getIdCartao() {
+        return idCartao;
     }
 
     public String getNumero() {

@@ -23,8 +23,8 @@ import static br.com.zup_academy.alisson_prado.proposta.compartilhado.ValidaUuid
 @RequestMapping("/api/v1/cartao")
 public class CadastraBiometriaController {
 
-    CartaoRepository cartaoRepository;
-    BiometriaRepository biometriaRepository;
+    private CartaoRepository cartaoRepository;
+    private BiometriaRepository biometriaRepository;
 
     public CadastraBiometriaController(CartaoRepository cartaoRepository, BiometriaRepository biometriaRepository) {
         this.cartaoRepository = cartaoRepository;

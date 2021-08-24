@@ -185,13 +185,13 @@ services:
 #      - production-network
 
   propostas:
-    #    build:
-    #      dockerfile: Dockerfile
-    #      context: .
+    build: ./
+#          dockerfile: Dockerfile
+#          context: .
     image: alissonprado/propostas
     container_name: propostas
     ports:
-      - "8081:8081"
+      - "8080:8080"
     environment:
       DATASOURCE_URL: jdbc:mysql://mysql:3306/propostas?createDatabaseIfNotExist=TRUE&useTimezone=true&serverTimezone=America/Sao_Paulo
       DATASOURCE_USER: root
@@ -202,9 +202,10 @@ services:
       ANALISE_URL: http://analise:9999
       ANALISE_SOLICITACAO_URL: /api/solicitacao
       CARTOES_URL: http://contas:8888
-      CARTOES_NOVO_CARTAO_URL: /api/cartoes
-      CARTOES_BLOQUEIA_CARTAO_URL: /api/cartoes/{id}/bloqueios
-      CARTOES_AVISO_VIAGEM_CARTAO_URL: /api/cartoes/{id}/avisos
+      CARTOES_NOVO_URL: /api/cartoes
+      CARTOES_BLOQUEIA_URL: /api/cartoes/{id}/bloqueios
+      CARTOES_AVISO_VIAGEM_URL: /api/cartoes/{id}/avisos
+      CARTOES_CADASTRA_CARTEIRA_DIGITAL_URL: /api/cartoes/{id}/carteiras
       TZ: America/Sao_Paulo
 #    networks:
 #      - production-network

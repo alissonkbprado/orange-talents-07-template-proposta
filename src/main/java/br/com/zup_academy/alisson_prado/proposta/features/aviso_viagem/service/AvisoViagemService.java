@@ -7,14 +7,14 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 
 
-@Component
+@Service
 public class AvisoViagemService {
 
     private AvisoViagemClientFeign clientFeign;
@@ -26,7 +26,7 @@ public class AvisoViagemService {
         this.meterRegistry = meterRegistry;
     }
 
-    public boolean enviaAvisoApi(String numeroCartao, String destino, LocalDate dataTermino){
+    public boolean enviaApi(String numeroCartao, String destino, LocalDate dataTermino){
         try{
             AvisoViagemTemplate avisoViagemTemplate = new AvisoViagemTemplate(destino, dataTermino);
 

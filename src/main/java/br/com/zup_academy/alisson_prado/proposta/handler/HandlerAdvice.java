@@ -62,7 +62,7 @@ public class HandlerAdvice {
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<ErroPadronizado> handle(IllegalStateException exception){
         Collection<String> mensagens = new ArrayList<>();
-        String message = String.format("Campo %s %s", exception.getLocalizedMessage().toString(), "Formato de entrada de dados inválido");
+        String message = String.format("Campo %s %s", exception.getLocalizedMessage(), "Formato de entrada de dados inválido");
         mensagens.add(message);
         ErroPadronizado erroPadronizado = new ErroPadronizado(mensagens);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erroPadronizado);
@@ -71,7 +71,7 @@ public class HandlerAdvice {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErroPadronizado> handle(HttpMessageNotReadableException exception){
         Collection<String> mensagens = new ArrayList<>();
-        String message = String.format("Campo %s %s", exception.getLocalizedMessage().toString(), "Corpo da requisição inválido");
+        String message = String.format("Campo %s %s", exception.getLocalizedMessage(), "Corpo da requisição inválido");
         mensagens.add(message);
         ErroPadronizado erroPadronizado = new ErroPadronizado(mensagens);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erroPadronizado);
@@ -80,7 +80,7 @@ public class HandlerAdvice {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErroPadronizado> handle(IllegalArgumentException exception){
         Collection<String> mensagens = new ArrayList<>();
-        String message = String.format("Campo %s %s", exception.getLocalizedMessage().toString());
+        String message = String.format("Campo %s %s", exception.getLocalizedMessage());
         mensagens.add(message);
         ErroPadronizado erroPadronizado = new ErroPadronizado(mensagens);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erroPadronizado);
@@ -89,7 +89,7 @@ public class HandlerAdvice {
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErroPadronizado> handle(ConstraintViolationException exception){
         Collection<String> mensagens = new ArrayList<>();
-        String message = String.format("Campo %s %s", exception.getLocalizedMessage().toString());
+        String message = String.format("Campo %s %s", exception.getLocalizedMessage());
         mensagens.add(message);
         ErroPadronizado erroPadronizado = new ErroPadronizado(mensagens);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erroPadronizado);
@@ -98,7 +98,7 @@ public class HandlerAdvice {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ErroPadronizado> handle(HttpRequestMethodNotSupportedException exception){
         Collection<String> mensagens = new ArrayList<>();
-        String message = String.format(exception.getLocalizedMessage().toString());
+        String message = String.format(exception.getLocalizedMessage());
         mensagens.add(message);
         ErroPadronizado erroPadronizado = new ErroPadronizado(mensagens);
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(erroPadronizado);
@@ -107,7 +107,7 @@ public class HandlerAdvice {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<ErroPadronizado> handle(MissingServletRequestParameterException exception){
         Collection<String> mensagens = new ArrayList<>();
-        String message = String.format("Campo %s ", exception.getLocalizedMessage().toString());
+        String message = String.format("Campo %s ", exception.getLocalizedMessage());
         mensagens.add(message);
         ErroPadronizado erroPadronizado = new ErroPadronizado(mensagens);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erroPadronizado);
@@ -117,6 +117,15 @@ public class HandlerAdvice {
     public ResponseEntity<ErroPadronizado> handle(MissingPathVariableException exception){
         Collection<String> mensagens = new ArrayList<>();
         String message = String.format("Campo %s ", exception.getParameter().getParameter().getName() + " não foi enviado pela URL");
+        mensagens.add(message);
+        ErroPadronizado erroPadronizado = new ErroPadronizado(mensagens);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erroPadronizado);
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ErroPadronizado> handle(NullPointerException exception){
+        Collection<String> mensagens = new ArrayList<>();
+        String message = String.format(exception.getMessage());
         mensagens.add(message);
         ErroPadronizado erroPadronizado = new ErroPadronizado(mensagens);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erroPadronizado);

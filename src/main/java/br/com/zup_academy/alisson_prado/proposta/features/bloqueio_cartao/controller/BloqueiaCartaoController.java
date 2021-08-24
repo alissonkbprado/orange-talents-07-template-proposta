@@ -23,9 +23,9 @@ import static br.com.zup_academy.alisson_prado.proposta.compartilhado.ValidaUuid
 @RestController
 public class BloqueiaCartaoController {
 
-    CartaoRepository cartaoRepository;
-    BloqueiaCartaoRepository bloqueiaCartaoRepository;
-    BloqueiaCartaoClientFeign bloqueiaCartaoClientFeign;
+    private CartaoRepository cartaoRepository;
+    private BloqueiaCartaoRepository bloqueiaCartaoRepository;
+    private BloqueiaCartaoClientFeign bloqueiaCartaoClientFeign;
 
     public BloqueiaCartaoController(CartaoRepository cartaoRepository,
                                     BloqueiaCartaoRepository bloqueiaCartaoRepository,
@@ -55,12 +55,13 @@ public class BloqueiaCartaoController {
             Bloqueio bloqueio = new Bloqueio(getClientIp(request), request.getHeader("User-Agent"), StatusBloqueio.SUCESSO, cartao);
             bloqueiaCartaoRepository.save(bloqueio);
             return ResponseEntity.ok().body("Cartão bloqueado com sucesso. IdBloqueio: " + bloqueio.getIdBloqueio());
-        }else {
-            Bloqueio bloqueio = new Bloqueio(getClientIp(request), request.getHeader("User-Agent"), StatusBloqueio.FALHA, cartao);
-            bloqueiaCartaoRepository.save(bloqueio);
-            throw new ApiErroException(HttpStatus.SERVICE_UNAVAILABLE, "Não foi possível efetuar o bloqueio no momento devido a falha de comunicação " +
-                    "com a operadora de cartão de crédito. Não se preocupe que nosso sistema está programado para efetuar o bloqueio de forma automática " +
-                    "quando conseguirmos restabelecer comunicação com a operadora de cartão de crédito.");
         }
+
+        Bloqueio bloqueio = new Bloqueio(getClientIp(request), request.getHeader("User-Agent"), StatusBloqueio.FALHA, cartao);
+        bloqueiaCartaoRepository.save(bloqueio);
+        throw new ApiErroException(HttpStatus.SERVICE_UNAVAILABLE, "Não foi possível efetuar o bloqueio no momento devido a falha de comunicação " +
+                "com a operadora de cartão de crédito. Não se preocupe que nosso sistema está programado para efetuar o bloqueio de forma automática " +
+                "quando conseguirmos restabelecer comunicação com a operadora de cartão de crédito.");
+
     }
 }

@@ -49,7 +49,7 @@ public class AvisoViagemController {
 
         AvisoViagem avisoViagem = request.toModel(cartao, httpServletRequest, avisoViagemRepository);
 
-        if (avisoViagemService.enviaAvisoApi(cartao.getNumero(), request.getPaisDestino(), request.getDataTermino())){
+        if (avisoViagemService.enviaApi(cartao.getNumero(), request.getPaisDestino(), request.getDataTermino())){
             avisoViagemRepository.save(avisoViagem);
             return ResponseEntity.ok().body("Aviso viagem cadastrado com sucesso.");
         }

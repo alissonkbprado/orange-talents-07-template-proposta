@@ -7,6 +7,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
       ZOOKEEPER_SYNC_LIMIT: 2
+      TZ: America/Sao_Paulo
 
   kafka:
     image: "confluentinc/cp-kafka:5.2.1"
@@ -21,6 +22,7 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      TZ: America/Sao_Paulo
 
   postgres:
     image: 'postgres:9.6-alpine'
@@ -33,6 +35,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: keycloak
       POSTGRES_HOST: postgres
+      TZ: America/Sao_Paulo
 
   keycloak:
     image: jboss/keycloak:11.0.0
@@ -61,6 +64,7 @@ services:
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: Pa55w0rd
       POSTGRES_PORT_5432_TCP_ADDR: 127.0.0.1
+      TZ: America/Sao_Paulo
     restart: on-failure
 
   analise:
@@ -72,6 +76,7 @@ services:
       LOG_LEVEL: INFO
       URL_SISTEMA_CARTAO: http://contas:8888/api/cartoes
       JAEGER_ENDPOINT: http://jaeger:14268/api/traces
+      TZ: America/Sao_Paulo
 
   contas:
     image: 'zupacademy/contas'
@@ -81,6 +86,7 @@ services:
       SERVER_PORT: 8888
       LOG_LEVEL: INFO
       JAEGER_ENDPOINT: http://jaeger:14268/api/traces
+      TZ: America/Sao_Paulo
 
   transacoes:
     image: 'zupacademy/transacoes'
@@ -93,6 +99,7 @@ services:
       LOG_LEVEL: INFO
       KAFKA_HOST: "kafka:29092"
       JAEGER_ENDPOINT: http://jaeger:14268/api/traces
+      TZ: America/Sao_Paulo
 
   jaeger:
     image: jaegertracing/all-in-one:1.21.0
@@ -107,12 +114,15 @@ services:
       - 9411:9411
     environment:
       COLLECTOR_ZIPKIN_HTTP_PORT: 9411
+      TZ: America/Sao_Paulo
 
   prometheus:
     image: prom/prometheus:v2.22.0
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-volume:/etc/prometheus/
+    environment:
+      TZ: America/Sao_Paulo
     ports:
       - "9090:9090"
 
@@ -122,6 +132,8 @@ services:
       - grafana-volume:/var/lib/grafana
     ports:
       - "3000:3000"
+    environment:
+      TZ: America/Sao_Paulo
     depends_on:
       - prometheus
 
@@ -133,6 +145,7 @@ services:
       VAULT_DEV_ROOT_TOKEN_ID: ee413645-dbe8-4848-afc6-6bb2768ada75
       VAULT_TOKEN: ee413645-dbe8-4848-afc6-6bb2768ada75
       VAULT_ADDR: http://127.0.0.1:8200
+      TZ: America/Sao_Paulo
 
 volumes:
   grafana-volume:
