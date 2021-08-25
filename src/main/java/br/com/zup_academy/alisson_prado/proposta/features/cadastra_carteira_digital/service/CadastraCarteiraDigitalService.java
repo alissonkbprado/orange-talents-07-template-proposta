@@ -1,7 +1,6 @@
 package br.com.zup_academy.alisson_prado.proposta.features.cadastra_carteira_digital.service;
 
 import br.com.zup_academy.alisson_prado.proposta.model.CarteiraDigital;
-import br.com.zup_academy.alisson_prado.proposta.model.Proposta;
 import br.com.zup_academy.alisson_prado.proposta.model.StatusCarteiraDigital;
 import feign.FeignException;
 import io.micrometer.core.instrument.Counter;
@@ -19,7 +18,7 @@ public class CadastraCarteiraDigitalService {
 
     private CadastraCarteiraDigitalClientFeign clientFeign;
     private final MeterRegistry meterRegistry;
-    private final Logger logger = LoggerFactory.getLogger(Proposta.class);
+    private final Logger logger = LoggerFactory.getLogger(CadastraCarteiraDigitalService.class);
 
     public CadastraCarteiraDigitalService(CadastraCarteiraDigitalClientFeign clientFeign, MeterRegistry meterRegistry) {
         this.clientFeign = clientFeign;
@@ -27,7 +26,6 @@ public class CadastraCarteiraDigitalService {
     }
 
     public boolean enviaApi(CarteiraDigital carteiraDigital){
-
         try{
             CadastraCarteiraDigitalTemplate template = new CadastraCarteiraDigitalTemplate(carteiraDigital.getEmail(), carteiraDigital.getNome());
 
@@ -43,18 +41,17 @@ public class CadastraCarteiraDigitalService {
 
         } catch (FeignException e){
             // Houve falha com a API
-            logger.error("Não foi possível cadastrar a carteira digital devido a falha de comunicação com a API de cartões.: " + e.getMessage());
+            logger.error("Não foi possível cadastrar a carteira digital devido a falha de comunicação com a API de cartões: {}", e.getMessage());
 
             // Incrementa um contador quando houver erro com a api de cartões
-            metricaContadorFalhaAvisoViagem();
+            metricaContadorFalhaCarteiraDigital();
             return false;
         }
     }
 
-    private void metricaContadorFalhaAvisoViagem() {
+    private void metricaContadorFalhaCarteiraDigital() {
         Collection<Tag> tags = new ArrayList<>();
-        tags.add(Tag.of("emissora", "Mastercard"));
-        tags.add(Tag.of("banco", "Itaú"));
+        tags.add(Tag.of("api", "cartoes"));
 
         Counter contadorDeFalhaCadastroCarteiraDigital = this.meterRegistry.counter("cadastra_carteira_digital_erro", tags);
 

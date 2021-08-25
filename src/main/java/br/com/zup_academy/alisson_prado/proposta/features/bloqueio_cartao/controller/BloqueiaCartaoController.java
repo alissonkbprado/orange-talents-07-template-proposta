@@ -52,6 +52,7 @@ public class BloqueiaCartaoController {
             throw new ApiErroException(HttpStatus.UNPROCESSABLE_ENTITY, "O cartão já está bloqueado.");
 
         if(cartao.bloqueia(bloqueiaCartaoClientFeign)){
+            System.getProperties().put( "periodicidade.bloqueiaCartao", 5000);
             Bloqueio bloqueio = new Bloqueio(getClientIp(request), request.getHeader("User-Agent"), StatusBloqueio.SUCESSO, cartao);
             bloqueiaCartaoRepository.save(bloqueio);
             return ResponseEntity.ok().body("Cartão bloqueado com sucesso. IdBloqueio: " + bloqueio.getIdBloqueio());

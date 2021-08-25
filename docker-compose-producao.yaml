@@ -198,7 +198,7 @@ services:
       DATASOURCE_PASSWORD: root
       KEYCLOAK_ISSUER_URI: http://keycloak:8080/auth/realms/propostas
       KEYCLOAK_JWKS_URI: http://keycloak:8080/auth/realms/propostas/protocol/openid-connect/certs
-      KEYCLOAK_FRONTEND_URL: http://keycloak:8080/auth
+      KEYCLOAK_FRONTEND_URL: http://keycloak:18080/auth
       ANALISE_URL: http://analise:9999
       ANALISE_SOLICITACAO_URL: /api/solicitacao
       CARTOES_URL: http://contas:8888

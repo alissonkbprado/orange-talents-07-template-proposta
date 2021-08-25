@@ -8,23 +8,28 @@ import java.net.UnknownHostException;
 
 public class GetIPAdress {
 
+    private static final String UNKNOWN = "unknown";
+
+    private GetIPAdress() {
+    }
+
     public static String getClientIp(HttpServletRequest request) {
 
-        String LOCALHOST_IPV4 = "127.0.0.1";
-        String LOCALHOST_IPV6 = "0:0:0:0:0:0:0:1";
+        String localhostIpv4 = "127.0.0.1";
+        String localhostIpv6 = "0:0:0:0:0:0:0:1";
 
         String ipAddress = request.getHeader("X-Forwarded-For");
-        if(StringUtils.isEmpty(ipAddress) || "unknown".equalsIgnoreCase(ipAddress)) {
+        if(StringUtils.isEmpty(ipAddress) || UNKNOWN.equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader("Proxy-Client-IP");
         }
 
-        if(StringUtils.isEmpty(ipAddress) || "unknown".equalsIgnoreCase(ipAddress)) {
+        if(StringUtils.isEmpty(ipAddress) || UNKNOWN.equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader("WL-Proxy-Client-IP");
         }
 
-        if(StringUtils.isEmpty(ipAddress) || "unknown".equalsIgnoreCase(ipAddress)) {
+        if(StringUtils.isEmpty(ipAddress) || UNKNOWN.equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getRemoteAddr();
-            if(LOCALHOST_IPV4.equals(ipAddress) || LOCALHOST_IPV6.equals(ipAddress)) {
+            if(localhostIpv4.equals(ipAddress) || localhostIpv6.equals(ipAddress)) {
                 try {
                     InetAddress inetAddress = InetAddress.getLocalHost();
                     ipAddress = inetAddress.getHostAddress();

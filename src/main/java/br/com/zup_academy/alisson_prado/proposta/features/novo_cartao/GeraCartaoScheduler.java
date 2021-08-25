@@ -57,7 +57,7 @@ public class GeraCartaoScheduler {
                     setBaggage(proposta.getIdProposta(), proposta.getCliente().getEmail());
                 } catch (Exception e){
                     //Não foi possível acessar a API de cartões.
-                    logger.error("Não foi possível gerar o número do cartão devido a falha de comunicação com a API de cartões.: " + e.getMessage());
+                    logger.error("Não foi possível gerar o número do cartão devido a falha de comunicação com a API de cartões: {}", e.getMessage());
 
                     setLogTracing("Não foi possível gerar o número do cartão devido a falha de comunicação com a API de cartões");
                 }

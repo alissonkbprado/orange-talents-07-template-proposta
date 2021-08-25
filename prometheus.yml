@@ -14,18 +14,26 @@ scrape_configs:
         labels:
           grupo: 'Prometheus'
 
-  - job_name: 'propostas-local'
-    metrics_path: '/actuator/prometheus'
-    scrape_interval: 10s
-    static_configs:
-      - targets: ['host.docker.internal:8080']
-        labels:
-          grupo: 'Propostas'
+#  - job_name: 'propostas-local'
+#    metrics_path: '/actuator/prometheus'
+#    scrape_interval: 10s
+#    static_configs:
+#      - targets: ['host.docker.internal:8080']
+#        labels:
+#          grupo: 'Propostas'
 
   - job_name: 'propostas-docker'
     metrics_path: '/actuator/prometheus'
     scrape_interval: 10s
     static_configs:
-      - targets: ['propostas:8081']
+      - targets: ['propostas:8080']
+        labels:
+          grupo: 'Propostas'
+
+  - job_name: 'propostas-local'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 10s
+    static_configs:
+      - targets: [ 'host.docker.internal:8080' ]
         labels:
           grupo: 'Propostas'

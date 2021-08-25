@@ -4,6 +4,9 @@ import java.util.Base64;
 
 public class ConverteBase64 {
 
+    private ConverteBase64() {
+    }
+
     public static String decodifica(String valor) throws Exception {
             return new String(Base64.getDecoder().decode(valor));
     }
