@@ -35,7 +35,7 @@ public class AvisoViagemController {
     }
 
     @PostMapping("/api/v1/cartao/{idCartao}/aviso_viagem")
-    public ResponseEntity<?> cadastra(@PathVariable @NotBlank String idCartao, @RequestBody @Valid AvisoViagemRequest request, HttpServletRequest httpServletRequest){
+    public ResponseEntity<?> cadastraAvisoViagen(@PathVariable @NotBlank String idCartao, @RequestBody @Valid AvisoViagemRequest request, HttpServletRequest httpServletRequest){
 
         if(idCartao == null || idCartao.isBlank() || isUuidNotValid(idCartao))
             throw new ApiErroException(HttpStatus.BAD_REQUEST, "Identificador do cartão não foi enviado ou é inválido.");

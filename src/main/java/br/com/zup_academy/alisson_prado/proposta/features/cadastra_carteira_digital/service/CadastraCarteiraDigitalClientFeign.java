@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.PostMapping;
 public interface CadastraCarteiraDigitalClientFeign {
 
     @PostMapping("${cartoes.cadastra_carteira_digital-cartao}")
-    CadastraCarteiraDigitalResponse cadastra(@PathVariable(value = "id") String id, CadastraCarteiraDigitalTemplate template);
+    CadastraCarteiraDigitalResponse cadastraCarteiraDigital(@PathVariable(value = "id") String id, CadastraCarteiraDigitalTemplate template);
 }

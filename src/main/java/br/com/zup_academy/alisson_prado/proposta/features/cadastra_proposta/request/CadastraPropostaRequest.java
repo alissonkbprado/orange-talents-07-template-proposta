@@ -52,4 +52,8 @@ public class CadastraPropostaRequest {
     public String getDocumento() {
         return documento.toString().replaceAll("\\p{Punct}", "");
     }
+
+    public String getEmail() {
+        return email;
+    }
 }

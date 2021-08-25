@@ -31,7 +31,7 @@ public class CadastraCarteiraDigitalService {
         try{
             CadastraCarteiraDigitalTemplate template = new CadastraCarteiraDigitalTemplate(carteiraDigital.getEmail(), carteiraDigital.getNome());
 
-            CadastraCarteiraDigitalResponse response = clientFeign.cadastra(carteiraDigital.getCartao().getNumero(), template);
+            CadastraCarteiraDigitalResponse response = clientFeign.cadastraCarteiraDigital(carteiraDigital.getCartao().getNumero(), template);
 
             // Se não lançar Exception retorna Status 200 e foi gravado o aviso viagem na api de cartões
             if (response.getResultado().equals(StatusCarteiraDigital.ASSOCIADA)){

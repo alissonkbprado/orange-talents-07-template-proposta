@@ -33,9 +33,9 @@ public class CadastraBiometriaController {
 
     @PostMapping("/biometria")
     @Transactional
-    public ResponseEntity<?> cadastra(@RequestParam(name = "idCartao", required = true) @NotBlank String idCartao,
-                                      @RequestBody @Valid CadastroBiometriaRequest request,
-                                      UriComponentsBuilder uriBuilder){
+    public ResponseEntity<?> cadastraBiometria(@RequestParam(name = "idCartao", required = true) @NotBlank String idCartao,
+                                               @RequestBody @Valid CadastroBiometriaRequest request,
+                                               UriComponentsBuilder uriBuilder){
 
         if(idCartao == null || idCartao.isBlank() || isUuidNotValid(idCartao))
             throw new ApiErroException(HttpStatus.BAD_REQUEST, "Identificador do cartão não foi enviado ou é inválido.");

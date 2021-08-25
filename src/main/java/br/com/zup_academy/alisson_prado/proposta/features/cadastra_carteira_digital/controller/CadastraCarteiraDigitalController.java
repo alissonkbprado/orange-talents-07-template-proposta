@@ -37,7 +37,7 @@ public class CadastraCarteiraDigitalController {
     }
 
     @PostMapping("/api/v1/cartao/{idCartao}/carteira_digital")
-    public ResponseEntity<?> bloqueia(@PathVariable @NotBlank String idCartao,
+    public ResponseEntity<?> cadastraCarteiraDigital(@PathVariable @NotBlank String idCartao,
                                       @RequestBody @Valid CadastraCarteiraDigitalRequest request,
                                       UriComponentsBuilder uriBuilder){
 

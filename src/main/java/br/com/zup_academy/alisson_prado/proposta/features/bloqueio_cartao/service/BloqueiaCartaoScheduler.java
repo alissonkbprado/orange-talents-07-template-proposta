@@ -5,6 +5,7 @@ import br.com.zup_academy.alisson_prado.proposta.repository.BloqueiaCartaoReposi
 import br.com.zup_academy.alisson_prado.proposta.repository.CartaoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -43,7 +44,7 @@ public class BloqueiaCartaoScheduler {
      * O StatusCartao é atualizado para StatusCartao.BLOQUEADO.
      */
     @Scheduled(initialDelay = 18000, fixedDelayString = "${periodicidade.bloqueiaCartao}")
-    private void bloqueiaCartao(){
+    protected void bloqueiaCartao(){
 
         List<Cartao> cartaoList = cartaoRepository.findFirst100ByStatus(StatusCartao.AGUARDANDO_BLOQUEIO);
 

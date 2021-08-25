@@ -1,11 +1,14 @@
 package br.com.zup_academy.alisson_prado.proposta.model;
 
+import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.request.CadastraPropostaRequest;
 import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.analise.SolicitaAnaliseClientFeign;
 import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.analise.SolicitaAnaliseResponse;
 import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.analise.SolicitaAnaliseTemplate;
 import br.com.zup_academy.alisson_prado.proposta.repository.PropostaRepository;
 import br.com.zup_academy.alisson_prado.proposta.validacao.Uuid;
 import feign.FeignException;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -79,9 +82,10 @@ public class Proposta {
     /**
      * Faz uma requisição POST para API de cartões que verifica se a proposta é elegível
      * @param clientFeign SolicitaAnaliseClientFeign NotNull
+     * @param tracer
      * @return
      */
-    public void avaliaRestricoes(SolicitaAnaliseClientFeign clientFeign) {
+    public void avaliaRestricoes(SolicitaAnaliseClientFeign clientFeign, Tracer tracer) {
         try{
             SolicitaAnaliseTemplate analiseTemplate = new SolicitaAnaliseTemplate(this.cliente.getDocumento(),
                     this.cliente.getNome(),
@@ -92,9 +96,12 @@ public class Proposta {
             // Se não lançar Exception retorna Status 201 e aprovação da proposta
             this.status = response.getResultadoSolicitacao().getStatusTransacaoPagamento();
 
+            setBaggage(tracer);
         } catch (FeignException.UnprocessableEntity unprocessableEntity){
             // Lança exception 422 caso não tenha sido aprovado
             this.status = StatusProposta.NAO_ELEGIVEL;
+
+            setBaggage(tracer);
         } catch (FeignException e){
             // Qualquer outro código de erro significa que houve falha com a API. Os dados são persistidos com Status AGUARDANDO_APROVACAO
             logger.error("Não foi possível realizar a análise da proposta devido a falha de comunicação com a API de análise.: " + e.getMessage());
@@ -103,5 +110,14 @@ public class Proposta {
 
     public void aprovaProposta() {
         this.status = StatusProposta.APROVADO;
+    }
+
+    // Baggage Tracing
+    private void setBaggage(Tracer tracer) {
+        Span activeSpan = tracer.activeSpan();
+        String userEmail = activeSpan.getBaggageItem("user.email");
+        String userId = activeSpan.getBaggageItem("user.id");
+        activeSpan.setBaggageItem("user.id", userId);
+        activeSpan.setBaggageItem("user.email", userEmail);
     }
 }
