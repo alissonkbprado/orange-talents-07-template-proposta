@@ -1,5 +1,6 @@
 package br.com.zup_academy.alisson_prado.proposta.model;
 
+import br.com.zup_academy.alisson_prado.proposta.converter.CryptoConverter;
 import br.com.zup_academy.alisson_prado.proposta.validacao.CpfOrCnpj;
 import org.springframework.util.Assert;
 
@@ -29,6 +30,7 @@ public class Cliente {
     @CpfOrCnpj
     @NotBlank
     @Column(nullable = false, unique = true)
+    @Convert(converter = CryptoConverter.class)
     private String documento;
 
     @NotNull

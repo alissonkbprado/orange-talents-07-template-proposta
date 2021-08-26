@@ -37,7 +37,7 @@ public class GeraCartaoScheduler {
      * Dados do Cartão persistidos na entidade Cartao.
      * A proposta é atualizada para Status APROVADO.
      */
-    @Scheduled(initialDelay = 15000, fixedDelayString = "${periodicidade.geraCartao}")
+    @Scheduled(initialDelay = 15000, fixedDelayString = "${periodicidade.gera-cartao}")
     protected void geraCartao(){
 
         List<Proposta> propostas = propostaRepository.findFirst100ByStatus(StatusProposta.ELEGIVEL);

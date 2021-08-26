@@ -1,5 +1,6 @@
 package br.com.zup_academy.alisson_prado.proposta.model;
 
+import br.com.zup_academy.alisson_prado.proposta.converter.CryptoConverter;
 import br.com.zup_academy.alisson_prado.proposta.features.bloqueio_cartao.service.BloqueiaCartaoClientFeign;
 import br.com.zup_academy.alisson_prado.proposta.features.bloqueio_cartao.service.BloqueiaCartaoTemplate;
 import br.com.zup_academy.alisson_prado.proposta.validacao.Uuid;
@@ -20,7 +21,7 @@ import java.util.UUID;
 public class Cartao {
 
     @Transient
-    private final Logger logger = LoggerFactory.getLogger(Proposta.class);
+    private final Logger logger = LoggerFactory.getLogger(Cartao.class);
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,6 +32,7 @@ public class Cartao {
 
     @NotBlank
     @Column(nullable = false, unique = true)
+    @Convert(converter = CryptoConverter.class)
     private String numero;
 
     @NotNull

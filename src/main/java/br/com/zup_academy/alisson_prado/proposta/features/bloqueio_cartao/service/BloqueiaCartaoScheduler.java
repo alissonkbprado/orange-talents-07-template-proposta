@@ -43,7 +43,7 @@ public class BloqueiaCartaoScheduler {
      * Dados do Bloqueio persistidos na entidade Bloqueio.
      * O StatusCartao é atualizado para StatusCartao.BLOQUEADO.
      */
-    @Scheduled(initialDelay = 18000, fixedDelayString = "${periodicidade.bloqueiaCartao}")
+    @Scheduled(initialDelay = 18000, fixedDelayString = "${periodicidade.bloqueia-cartao}")
     protected void bloqueiaCartao(){
 
         List<Cartao> cartaoList = cartaoRepository.findFirst100ByStatus(StatusCartao.AGUARDANDO_BLOQUEIO);
