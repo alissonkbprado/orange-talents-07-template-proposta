@@ -53,7 +53,7 @@ public class CadastraCarteiraDigitalController {
 
         CarteiraDigital carteiraDigital = request.toModel(cartao, carteiraDigitalRepository);
 
-        if (!cadastraCarteiraDigitalService.enviaApi(carteiraDigital))
+        if (!cadastraCarteiraDigitalService.enviaCadastroCarteiraDigitalApi(carteiraDigital))
             throw new ApiErroException(HttpStatus.SERVICE_UNAVAILABLE, "Não foi possível efetuar o cadastro da carteira digital no momento " +
                     "devido a falha de comunicação com a operadora de cartão de crédito. Por favor tente novamente mais tarde.");
 

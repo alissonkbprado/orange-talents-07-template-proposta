@@ -34,7 +34,6 @@ public class CadastraCarteiraDigitalRequest {
     }
 
     public CarteiraDigital toModel(Cartao cartao, CarteiraDigitalRepository carteiraDigitalRepository) {
-
         if(cartao.isBloqueado())
             throw new ApiErroException(HttpStatus.UNPROCESSABLE_ENTITY, "Operação não permitida, este cartão está bloqueado.");
 

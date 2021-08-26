@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.configurers.oauth2.ser
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-//public class SecurityConfiguration {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

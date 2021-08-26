@@ -20,7 +20,7 @@ public class GeraCartaoScheduler {
     private PropostaRepository propostaRepository;
     private CartaoRepository cartaoRepository;
     private NovoCartaoClientFeign clientFeign;
-    private final Logger logger = LoggerFactory.getLogger(Proposta.class);
+    private final Logger logger = LoggerFactory.getLogger(GeraCartaoScheduler.class);
     private final Tracer tracer;
 
     public GeraCartaoScheduler(PropostaRepository propostaRepository, CartaoRepository cartaoRepository, NovoCartaoClientFeign clientFeign, Tracer tracer) {
@@ -39,14 +39,13 @@ public class GeraCartaoScheduler {
      */
     @Scheduled(initialDelay = 15000, fixedDelayString = "${periodicidade.gera-cartao}")
     protected void geraCartao(){
-
         List<Proposta> propostas = propostaRepository.findFirst100ByStatus(StatusProposta.ELEGIVEL);
 
         if(!propostas.isEmpty())
             propostas.forEach(proposta -> {
                 try {
-                    NovoCartaoResponse cartaoRequest = clientFeign.geraCartao(proposta.getIdProposta());
-                    Cartao cartao = cartaoRequest.toModel(propostaRepository);
+                    NovoCartaoResponse response = clientFeign.geraCartao(proposta.getIdProposta());
+                    Cartao cartao = response.toModel(propostaRepository);
 
                     if (cartao != null) {
                         cartaoRepository.save(cartao);

@@ -18,7 +18,6 @@ import java.util.Collection;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/propostas")
 public class ConsultaStatusProposta {
 
     private PropostaRepository propostaRepository;
@@ -29,13 +28,13 @@ public class ConsultaStatusProposta {
         this.meterRegistry = meterRegistry;
     }
 
-    @GetMapping
+    @GetMapping("/api/v1/propostas")
     public ResponseEntity<?> status(@RequestParam(name = "idProposta", required = true) String idProposta){
         Collection<Tag> tags = new ArrayList<>();
         tags.add(Tag.of("emissora", "Mastercard"));
         tags.add(Tag.of("banco", "Itaú"));
 
-        Timer timerConsultarProposta = this.meterRegistry.timer("consulta_proposta", tags);
+        Timer timerConsultarProposta = this.meterRegistry.timer("proposta_consulta_status", tags);
 
         return timerConsultarProposta.record(() -> {
             Optional<Proposta> optionalProposta = propostaRepository.findByIdProposta(idProposta);

@@ -94,8 +94,9 @@ public class Proposta {
             SolicitaAnaliseResponse response = clientFeign.solicitaAnalise(analiseTemplate);
 
             // Se não lançar Exception retorna Status 201 e aprovação da proposta
-            this.status = response.getResultadoSolicitacao().getStatusTransacaoPagamento();
+            this.status = StatusProposta.ELEGIVEL;
 
+            // Adiciona Baggage para o Tracing
             setBaggage(tracer);
         } catch (FeignException.UnprocessableEntity unprocessableEntity){
             // Lança exception 422 caso não tenha sido aprovado
@@ -104,7 +105,7 @@ public class Proposta {
             setBaggage(tracer);
         } catch (FeignException e){
             // Qualquer outro código de erro significa que houve falha com a API. Os dados são persistidos com Status AGUARDANDO_APROVACAO
-            logger.error("Não foi possível realizar a análise da proposta devido a falha de comunicação com a API de análise.: " + e.getMessage());
+            logger.error("Não foi possível realizar a análise da proposta devido a falha de comunicação com a API de análise.: {}", e.getMessage());
         }
     }
 

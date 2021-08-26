@@ -1,11 +1,13 @@
 package br.com.zup_academy.alisson_prado.proposta.features.bloqueio_cartao.service;
 
-import br.com.zup_academy.alisson_prado.proposta.model.*;
+import br.com.zup_academy.alisson_prado.proposta.model.Bloqueio;
+import br.com.zup_academy.alisson_prado.proposta.model.Cartao;
+import br.com.zup_academy.alisson_prado.proposta.model.StatusBloqueio;
+import br.com.zup_academy.alisson_prado.proposta.model.StatusCartao;
 import br.com.zup_academy.alisson_prado.proposta.repository.BloqueiaCartaoRepository;
 import br.com.zup_academy.alisson_prado.proposta.repository.CartaoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -24,7 +26,7 @@ public class BloqueiaCartaoScheduler {
     private BloqueiaCartaoRepository bloqueiaCartaoRepository;
     private BloqueiaCartaoClientFeign clientFeign;
     private PlatformTransactionManager transactionManager;
-    private final Logger logger = LoggerFactory.getLogger(Proposta.class);
+    private final Logger logger = LoggerFactory.getLogger(BloqueiaCartaoScheduler.class);
 
     public BloqueiaCartaoScheduler(CartaoRepository cartaoRepository,
                                    BloqueiaCartaoClientFeign bloqueiaCartaoClientFeign,
@@ -38,7 +40,7 @@ public class BloqueiaCartaoScheduler {
     /**
      * Rotina criada caso tenha ocorrido falha ao tentar processar o bloqueio do cartão com a API de Cartões no momento da solicitação do cliente.
      *
-     * Rotina que consulta API externa de Cartões para bloquear cartão que estiver com StatusCartao.AGUARDANDO_BLOQUEIO
+     * Consulta API externa de Cartões para bloquear cartão que estiver com StatusCartao.AGUARDANDO_BLOQUEIO
      *
      * Dados do Bloqueio persistidos na entidade Bloqueio.
      * O StatusCartao é atualizado para StatusCartao.BLOQUEADO.
@@ -69,13 +71,13 @@ public class BloqueiaCartaoScheduler {
             transactionManager.commit(transactionStatus);
         } catch (RuntimeException ex){
             transactionManager.rollback(transactionStatus);
+            logger.error("Falha ao tentar persistir dados de cartão bloquado: " + cartao.getIdCartao());
             throw ex;
         }
     }
 
     private String getIpServidor(){
         try {
-            System.out.println("${local.server.port}");
             return InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
             return InetAddress.getLoopbackAddress().getHostAddress();

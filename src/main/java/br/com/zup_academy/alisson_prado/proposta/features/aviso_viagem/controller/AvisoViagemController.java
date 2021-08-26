@@ -49,14 +49,12 @@ public class AvisoViagemController {
 
         AvisoViagem avisoViagem = request.toModel(cartao, httpServletRequest, avisoViagemRepository);
 
-        if (avisoViagemService.enviaApi(cartao.getNumero(), request.getPaisDestino(), request.getDataTermino())){
+        if (avisoViagemService.enviaAvisoViagemApi(cartao.getNumero(), request.getPaisDestino(), request.getDataTermino())){
             avisoViagemRepository.save(avisoViagem);
             return ResponseEntity.ok().body("Aviso viagem cadastrado com sucesso.");
         }
 
         throw new ApiErroException(HttpStatus.SERVICE_UNAVAILABLE, "Não foi possível efetuar o cadastro de aviso viagem no momento devido a falha de comunicação " +
                 "com a operadora de cartão de crédito. Por favor tente novamente mais tarde.");
-
-
     }
 }

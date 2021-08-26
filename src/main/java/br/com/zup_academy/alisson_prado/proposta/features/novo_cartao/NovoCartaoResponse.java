@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public class NovoCartaoResponse {
 
-    private final Logger logger = LoggerFactory.getLogger(Proposta.class);
+    private final Logger logger = LoggerFactory.getLogger(NovoCartaoResponse.class);
 
     @NotBlank
     private String id;
@@ -36,7 +36,7 @@ public class NovoCartaoResponse {
         if (optionalProposta.isPresent())
             return new Cartao(id, emitidoEm, optionalProposta.get().getCliente());
 
-        logger.error("O idProposta retornado não foi encontrado em nossa base de dados: " + idProposta);
+        logger.error("O idProposta retornado não foi encontrado em nossa base de dados: {}", idProposta);
 
         return null;
     }

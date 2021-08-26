@@ -1,14 +1,12 @@
 package br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.controller;
 
+import br.com.zup_academy.alisson_prado.proposta.metricas.Metricas;
 import br.com.zup_academy.alisson_prado.proposta.exception.ApiErroException;
 import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.request.CadastraPropostaRequest;
 import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.response.CadastraPropostaResponse;
 import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.analise.SolicitaAnaliseClientFeign;
 import br.com.zup_academy.alisson_prado.proposta.model.Proposta;
 import br.com.zup_academy.alisson_prado.proposta.repository.PropostaRepository;
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.Tag;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import org.springframework.boot.actuate.health.Health;
@@ -28,13 +26,13 @@ public class PropostasController implements HealthIndicator {
 
     private PropostaRepository propostaRepository;
     private SolicitaAnaliseClientFeign clientFeign;
-    private final MeterRegistry meterRegistry;
+    private Metricas metricas;
     private final Tracer tracer;
 
-    public PropostasController(PropostaRepository propostaRepository, SolicitaAnaliseClientFeign clientFeign, MeterRegistry meterRegistry, Tracer tracer) {
+    public PropostasController(PropostaRepository propostaRepository, SolicitaAnaliseClientFeign clientFeign, Metricas metricas,Tracer tracer) {
         this.propostaRepository = propostaRepository;
         this.clientFeign = clientFeign;
-        this.meterRegistry = meterRegistry;
+        this.metricas = metricas;
         this.tracer = tracer;
     }
 
@@ -48,7 +46,7 @@ public class PropostasController implements HealthIndicator {
         proposta.avaliaRestricoes(clientFeign, tracer);
         propostaRepository.save(proposta);
 
-        metricaContadorPropostaCriada();
+        metricas.incrementaPropostaCriada("Mastercard", "Itau");
         setTag(request, proposta);
         setBaggage(request, proposta);
 
@@ -79,17 +77,6 @@ public class PropostasController implements HealthIndicator {
 
         return Health.status(Status.UP).withDetails(details).build();
 
-    }
-
-    // Métrica tipo Counter
-    public void metricaContadorPropostaCriada() {
-        Collection<Tag> tags = new ArrayList<>();
-        tags.add(Tag.of("emissora", "Mastercard"));
-        tags.add(Tag.of("banco", "Itaú"));
-
-        Counter contadorDePropostasCriadas = this.meterRegistry.counter("proposta_criada", tags);
-
-        contadorDePropostasCriadas.increment();
     }
 
     // Tag Tracing

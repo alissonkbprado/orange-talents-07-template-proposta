@@ -101,7 +101,7 @@ public class Cartao {
             return true;
         } catch (Exception e) {
             this.status = StatusCartao.AGUARDANDO_BLOQUEIO;
-            logger.error("Não foi possível bloquear o cartão devido a falha de comunicação com a API de cartões: " + e.getMessage());
+            logger.error("Não foi possível bloquear o cartão devido a falha de comunicação com a API de cartões: {}", e.getMessage());
             return false;
         }
     }

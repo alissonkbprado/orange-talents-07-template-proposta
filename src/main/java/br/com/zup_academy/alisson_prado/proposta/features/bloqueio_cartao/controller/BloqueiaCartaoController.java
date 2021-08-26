@@ -36,7 +36,7 @@ public class BloqueiaCartaoController {
     }
 
     @PostMapping("/api/v1/cartao/{idCartao}/bloqueia")
-    public ResponseEntity<?> bloqueia(@PathVariable @NotBlank String idCartao, HttpServletRequest request){
+    public ResponseEntity<?> bloqueiaCartao(@PathVariable @NotBlank String idCartao, HttpServletRequest request){
 
         if(idCartao == null || idCartao.isBlank() || isUuidNotValid(idCartao))
             throw new ApiErroException(HttpStatus.BAD_REQUEST, "Identificador do cartão não foi enviado ou é inválido.");
@@ -52,7 +52,6 @@ public class BloqueiaCartaoController {
             throw new ApiErroException(HttpStatus.UNPROCESSABLE_ENTITY, "O cartão já está bloqueado.");
 
         if(cartao.bloqueia(bloqueiaCartaoClientFeign)){
-            System.getProperties().put( "periodicidade.bloqueia-cartao", 5000);
             Bloqueio bloqueio = new Bloqueio(getClientIp(request), request.getHeader("User-Agent"), StatusBloqueio.SUCESSO, cartao);
             bloqueiaCartaoRepository.save(bloqueio);
             return ResponseEntity.ok().body("Cartão bloqueado com sucesso. IdBloqueio: " + bloqueio.getIdBloqueio());

@@ -40,15 +40,7 @@ public class CadastraBiometriaController {
         if(idCartao == null || idCartao.isBlank() || isUuidNotValid(idCartao))
             throw new ApiErroException(HttpStatus.BAD_REQUEST, "Identificador do cartão não foi enviado ou é inválido.");
 
-        Optional<Cartao> optionalCartao = cartaoRepository.findByIdCartao(idCartao);
-
-        if (optionalCartao.isEmpty())
-            throw new ApiErroException(HttpStatus.NOT_FOUND, "Não foi encontrado cartão cadastrado no sistema com o identificador enviado.");
-
-        if(optionalCartao.get().isBloqueado())
-            throw new ApiErroException(HttpStatus.UNPROCESSABLE_ENTITY, "Este cartão está bloqueado.");
-
-        Biometria biometria = request.toModel(optionalCartao.get());
+        Biometria biometria = request.toModel(cartaoRepository.findByIdCartao(idCartao));
 
         biometriaRepository.save(biometria);
 
