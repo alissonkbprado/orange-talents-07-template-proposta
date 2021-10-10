@@ -14,13 +14,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests(authorizeRequests ->
-                    authorizeRequests
-                            .antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
-                            .antMatchers(HttpMethod.GET, "/api/v1/propostas/*").hasAuthority("SCOPE_scope-propostas")
-                            .antMatchers(HttpMethod.GET, "/api/v1/biometrias/*").hasAuthority("SCOPE_scope-propostas")
-                            .antMatchers(HttpMethod.POST, "/api/v1/propostas").hasAuthority("SCOPE_scope-propostas")
-                            .antMatchers(HttpMethod.POST, "/api/v1/cartao/**").hasAuthority("SCOPE_scope-propostas")
-                            .anyRequest().authenticated() // Qualquer outra requisição deverá ser autenticadas
-                ).oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
+                authorizeRequests
+                        .antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
+                        .antMatchers(HttpMethod.GET, "/api/v1/propostas/*").hasAuthority("SCOPE_scope-propostas")
+                        .antMatchers(HttpMethod.GET, "/api/v1/biometrias/*").hasAuthority("SCOPE_scope-propostas")
+                        .antMatchers(HttpMethod.POST, "/api/v1/propostas").hasAuthority("SCOPE_scope-propostas")
+                        .antMatchers(HttpMethod.POST, "/api/v1/cartao/**").hasAuthority("SCOPE_scope-propostas")
+                        .anyRequest().authenticated() // Qualquer outra requisição deverá ser autenticadas
+        ).oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
     }
+
+
 }

@@ -1,10 +1,10 @@
 package br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.controller;
 
-import br.com.zup_academy.alisson_prado.proposta.metricas.Metricas;
 import br.com.zup_academy.alisson_prado.proposta.exception.ApiErroException;
 import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.request.CadastraPropostaRequest;
 import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.response.CadastraPropostaResponse;
 import br.com.zup_academy.alisson_prado.proposta.features.cadastra_proposta.service.analise.SolicitaAnaliseClientFeign;
+import br.com.zup_academy.alisson_prado.proposta.metricas.Metricas;
 import br.com.zup_academy.alisson_prado.proposta.model.Proposta;
 import br.com.zup_academy.alisson_prado.proposta.repository.PropostaRepository;
 import io.opentracing.Span;
@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/propostas")
@@ -37,7 +39,8 @@ public class PropostasController implements HealthIndicator {
     }
 
     @PostMapping
-    public ResponseEntity<?> cadastraProposta(@RequestBody @Valid CadastraPropostaRequest request, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<?> cadastraProposta(@RequestBody @Valid CadastraPropostaRequest request, UriComponentsBuilder uriBuilder) {
+
         Proposta proposta = request.toModel();
 
         if(proposta.isDocumentoCadastrado(propostaRepository))

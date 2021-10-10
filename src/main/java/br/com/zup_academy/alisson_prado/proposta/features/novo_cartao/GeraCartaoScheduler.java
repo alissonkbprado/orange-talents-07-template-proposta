@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Component
@@ -48,9 +49,7 @@ public class GeraCartaoScheduler {
                     Cartao cartao = response.toModel(propostaRepository);
 
                     if (cartao != null) {
-                        cartaoRepository.save(cartao);
-                        proposta.aprovaProposta();
-                        propostaRepository.save(proposta);
+                        persiste(proposta, cartao);
                     }
 
                     setBaggage(proposta.getIdProposta(), proposta.getCliente().getEmail());
@@ -62,6 +61,14 @@ public class GeraCartaoScheduler {
                 }
             });
     }
+
+    @Transactional
+    private void persiste(Proposta proposta, Cartao cartao) {
+        cartaoRepository.save(cartao);
+        proposta.aprovaProposta();
+        propostaRepository.save(proposta);
+    }
+
 
     // Baggage Tracing
     private void setBaggage(String idProposta, String email) {
